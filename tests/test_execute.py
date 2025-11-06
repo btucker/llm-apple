@@ -106,15 +106,15 @@ def test_execute_with_custom_max_tokens(mock_applefoundationmodels, mock_respons
 
 
 def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
-    """Test execute with system instructions."""
+    """Test execute with system prompt."""
     model = llm_apple.AppleModel()
 
     prompt = Mock()
     prompt.prompt = "Test"
+    prompt.system = "You are helpful"
     prompt.options = Mock()
     prompt.options.temperature = 1.0
     prompt.options.max_tokens = 1024
-    prompt.options.instructions = "You are helpful"
 
     result = model.execute(
         prompt=prompt,
@@ -123,7 +123,7 @@ def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
         conversation=None
     )
 
-    # Verify session was created with instructions
+    # Verify session was created with system prompt
     client = model._get_client()
     # Should have called create_session with instructions
     called_with_instructions = False

@@ -6,35 +6,17 @@ This plugin exposes Apple's on-device Foundation Models through the [llm](https:
 
 ## Requirements
 
-- macOS 15.1 or later
-- Apple Silicon (M1/M2/M3/M4) or compatible device
+- macOS 26 or later
 - Apple Intelligence enabled
 - Python 3.8 or later
-- apple-foundation-models-py installed
+- [apple-foundation-models](https://pypi.org/project/apple-foundation-models/) installed
 
 ## Installation
 
-First, install apple-foundation-models:
-
 ```bash
-# Clone and install apple-foundation-models-py
-git clone https://github.com/btucker/apple-foundation-models-py
-cd apple-foundation-models-py
-pip install -e .
+pip install llm # if llm is not already installed
+llm install llm-apple
 ```
-
-Then install this plugin:
-
-```bash
-# Install from path
-llm install -e /path/to/llm-apple
-
-# Or from current directory
-cd llm-apple
-llm install -e .
-```
-
-**Note:** `apple-foundation-models` is a runtime dependency that requires building from source with Xcode Command Line Tools installed. It's not required for running tests, which use mocks.
 
 ## Usage
 
@@ -59,7 +41,7 @@ llm -m apple "Write a poem" -o temperature 1.5 -o max_tokens 500
 With system instructions:
 
 ```bash
-llm -m apple "What is Python?" -o instructions "You are a helpful programming tutor"
+llm -m apple "What is Python?" --system "You are a helpful programming tutor"
 ```
 
 ### Conversations
@@ -80,7 +62,8 @@ llm -m apple "What is my name?" --continue conversation1
   - 0.0 = deterministic
   - 2.0 = very random
 - `max_tokens` (int, default: 1024): Maximum tokens to generate
-- `instructions` (str): System instructions to guide AI behavior
+
+System prompts can be provided using llm's built-in `--system` or `-s` flag.
 
 ## Availability
 
@@ -106,11 +89,11 @@ Factual query with lower temperature:
 llm -m apple "Explain quantum computing" -o temperature 0.3
 ```
 
-With system instructions:
+With system prompt for career guidance:
 
 ```bash
 llm -m apple "Should I learn Python or JavaScript?" \
-  -o instructions "You are a career counselor specializing in tech"
+  --system "You are a career counselor specializing in tech"
 ```
 
 ## Development

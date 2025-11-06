@@ -11,10 +11,10 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
     # Create prompt with all custom options
     prompt = Mock()
     prompt.prompt = "Test prompt text"
+    prompt.system = "You are a helpful assistant"
     prompt.options = Mock()
     prompt.options.temperature = 0.7
     prompt.options.max_tokens = 500
-    prompt.options.instructions = "You are a helpful assistant"
 
     response = Mock()
     conversation = None
@@ -30,7 +30,7 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
     # Get the session that was created
     client = model._get_client()
 
-    # Verify create_session was called with instructions
+    # Verify create_session was called with system prompt as instructions
     client.create_session.assert_called_with(instructions="You are a helpful assistant")
 
     # Get the session instance
@@ -51,10 +51,10 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
     # Create prompt with all custom options
     prompt = Mock()
     prompt.prompt = "Streaming test"
+    prompt.system = "You are creative"
     prompt.options = Mock()
     prompt.options.temperature = 1.5
     prompt.options.max_tokens = 2048
-    prompt.options.instructions = "You are creative"
 
     response = Mock()
     conversation = None
@@ -73,7 +73,7 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
     # Get the session that was created
     client = model._get_client()
 
-    # Verify create_session was called with instructions
+    # Verify create_session was called with system prompt as instructions
     client.create_session.assert_called_with(instructions="You are creative")
 
     # Get the session instance
@@ -94,10 +94,10 @@ def test_default_values_when_options_none(mock_applefoundationmodels):
     # Create prompt with None values
     prompt = Mock()
     prompt.prompt = "Test"
+    prompt.system = None
     prompt.options = Mock()
     prompt.options.temperature = None
     prompt.options.max_tokens = None
-    prompt.options.instructions = None
 
     response = Mock()
 
@@ -163,20 +163,20 @@ def test_conversation_session_reuse_preserves_parameters(mock_applefoundationmod
     # First call with one set of parameters
     prompt1 = Mock()
     prompt1.prompt = "First"
+    prompt1.system = "Be concise"
     prompt1.options = Mock()
     prompt1.options.temperature = 0.5
     prompt1.options.max_tokens = 100
-    prompt1.options.instructions = "Be concise"
 
     model.execute(prompt=prompt1, stream=False, response=Mock(), conversation=conversation)
 
     # Second call to same conversation with different parameters
     prompt2 = Mock()
     prompt2.prompt = "Second"
+    prompt2.system = "Be creative"
     prompt2.options = Mock()
     prompt2.options.temperature = 1.2
     prompt2.options.max_tokens = 500
-    prompt2.options.instructions = "Be creative"
 
     model.execute(prompt=prompt2, stream=False, response=Mock(), conversation=conversation)
 

@@ -40,18 +40,15 @@ def test_apple_model_options():
     # Valid options
     options = llm_apple.AppleModel.Options(
         temperature=1.0,
-        max_tokens=500,
-        instructions="Test instructions"
+        max_tokens=500
     )
     assert options.temperature == 1.0
     assert options.max_tokens == 500
-    assert options.instructions == "Test instructions"
 
     # Default values
     options_default = llm_apple.AppleModel.Options()
     assert options_default.temperature == 1.0
     assert options_default.max_tokens == 1024
-    assert options_default.instructions is None
 
 
 def test_apple_model_options_validation():

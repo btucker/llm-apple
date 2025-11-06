@@ -37,10 +37,6 @@ class AppleModel(llm.Model):
             gt=0,
             description="Maximum tokens to generate"
         )
-        instructions: Optional[str] = Field(
-            default=None,
-            description="System instructions to guide AI behavior"
-        )
 
     def __init__(self):
         """Initialize the Apple model."""
@@ -101,13 +97,15 @@ class AppleModel(llm.Model):
         # Extract options using helper method
         temperature = self._get_option_value(prompt.options, 'temperature', DEFAULT_TEMPERATURE)
         max_tokens = self._get_option_value(prompt.options, 'max_tokens', DEFAULT_MAX_TOKENS)
-        instructions = self._get_option_value(prompt.options, 'instructions', None)
+
+        # Use llm's built-in system prompt support
+        system_prompt = prompt.system if hasattr(prompt, 'system') else None
 
         # Get conversation ID if available
         conversation_id = conversation.id if conversation else None
 
         # Get or create session
-        session = self._get_session(conversation_id, instructions)
+        session = self._get_session(conversation_id, system_prompt)
 
         # Generate response
         if stream:
