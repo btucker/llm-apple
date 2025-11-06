@@ -20,16 +20,16 @@ llm install llm-apple
 
 ## Usage
 
-Basic usage:
+Basic usage (streaming is enabled by default):
 
 ```bash
 llm -m apple "What is the capital of France?"
 ```
 
-With streaming:
+Without streaming:
 
 ```bash
-llm -m apple "Tell me a story" --stream
+llm -m apple "Tell me a story" --no-stream
 ```
 
 With options:
