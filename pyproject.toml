@@ -1,24 +1,15 @@
 [project]
 name = "llm-apple"
-version = "0.1.1"
+version = "0.1.2"
 description = "LLM plugin for Apple Foundation Models (Apple Intelligence)"
 readme = "README.md"
-authors = [
-    {name = "Ben Tucker"}
-]
-license = {text = "Apache-2.0"}
+authors = [{ name = "Ben Tucker" }]
+license = { text = "MIT" }
 requires-python = ">=3.8"
-dependencies = [
-    "llm>=0.15",
-    "apple-foundation-models>=0.1.0",
-]
+dependencies = ["llm>=0.15", "apple-foundation-models>=0.1.0"]
 
 [project.optional-dependencies]
-test = [
-    "pytest>=7.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-cov>=4.0",
-]
+test = ["pytest>=7.0", "pytest-asyncio>=0.21.0", "pytest-cov>=4.0"]
 
 [project.urls]
 Homepage = "https://github.com/btucker/llm-apple"
@@ -37,11 +28,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = [
-    "-v",
-    "--strict-markers",
-    "--tb=short",
-]
+addopts = ["-v", "--strict-markers", "--tb=short"]
 
 [tool.coverage.run]
 source = ["llm_apple"]
@@ -49,9 +36,9 @@ omit = ["tests/*"]
 
 [tool.coverage.report]
 exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "def __repr__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
 ]
