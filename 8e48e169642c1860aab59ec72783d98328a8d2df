@@ -1,0 +1,3 @@
+- why does @README.md show --stream as an option?
+- I think --no-stream is an option, but --stream doesn't work. we should remove
+  it from the docs or change it to --no-stream
