@@ -1,0 +1,2 @@
+- the system prompt should work with llm's build in --system support. not passed
+  through as option
