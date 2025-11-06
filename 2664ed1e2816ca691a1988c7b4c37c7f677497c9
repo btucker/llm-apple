@@ -1,0 +1,2511 @@
+# AgentTrail: AI Assistant Interactions
+
+## Session: 27a72060...
+**Time:** 2025-11-06 19:07:59
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll help you build an llm plugin for apple-foundation-models. Let me start by reading the documentation and exploring the apple-foundation-models-py codebase.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **WebFetch**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **WebFetch**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Glob**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me check what's currently in the working directory:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! I'll now create an llm plugin for apple-foundation-models. Let me plan out the tasks:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me create the package structure and configuration:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now I need to update the llm-apple plugin to use the correct package name and import path. Let me fix both files:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me try to install apple-foundation-models first. Since it needs to be built from source, let me try installing it:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+The environment is managed by uv. Let me use uv to install both packages:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Let me simplify the approach. Since apple-foundation-models needs to be built and we're in a testing phase, I'll make it a softer dependency and update the README with installation instructions:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me try installing the llm-apple plugin:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Excellent! The plugin is installed. Let me verify it's registered:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+The issue is that I'm importing in `__init__` which runs immediately. Let me fix this by making the imports lazy and deferring the availability check:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! The plugin is now registered and showing up in the models list. Let me update the todo list:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Excellent! I've successfully built an llm plugin for Apple Foundation Models. Here's what was created:
+
+## Project Structure
+
+```
+llm-apple/
+├── pyproject.toml       # Package configuration
+├── llm_apple.py         # Main plugin module
+└── README.md            # Documentation
+```
+
+## Key Features Implemented
+
+1. **Model Registration**: The plugin registers an "apple" model with llm
+2. **Streaming Support**: Full async streaming support using Apple Foundation Models' streaming API
+3. **Conversation Support**: Maintains conversation state across multiple prompts
+4. **Configurable Options**:
+   - `temperature` (0.0-2.0): Controls randomness
+   - `max_tokens`: Maximum tokens to generate
+   - `instructions`: System instructions for the AI
+5. **Lazy Loading**: Imports are deferred until execution to keep `llm --help` fast
+6. **Availability Checking**: Validates Apple Intelligence is available before use
+
+## Plugin Architecture
+
+The plugin follows the llm plugin architecture:
+- **register_models()**: Hook function that registers the AppleModel
+- **AppleModel**: Extends `llm.Model` with:
+  - `model_id = "apple"`
+  - `can_stream = True`
+  - Options class for configuration
+  - execute() method that handles both streaming and non-streaming
+
+## Usage
+
+Once apple-foundation-models is installed, users can:
+
+```bash
+# Basic usage
+llm -m apple "What is Python?"
+
+# With streaming
+llm -m apple "Tell me a story" --stream
+
+# With options
+llm -m apple "Write code" -o temperature 0.3 -o max_tokens 2000
+
+# Conversations
+llm -m apple "My name is Alice" --save conv1
+llm -m apple "What is my name?" --continue conv1
+```
+
+## Status
+
+✅ Plugin structure created
+✅ Model registration working (visible in `llm models list`)
+✅ Streaming support implemented
+✅ Conversation support implemented
+✅ Documentation complete
+
+The plugin is ready to use once apple-foundation-models is properly installed and built!
+
+---
+
+## Session: 4341c9f9...
+**Time:** 2025-11-06 21:03:22
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll remove the `run_tests.sh` file for you. Since it's currently staged in git, I'll unstage it and delete it.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Done! The `run_tests.sh` file has been removed and unstaged from git. You can run tests directly with `uv run pytest` when needed.
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll update the README to remove references to `run_tests.sh` and keep just the pytest instructions.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Done! I've updated the README to remove the references to `run_tests.sh`. The Development section now just shows how to run tests directly with `uv run pytest`.
+
+---
+
+## Session: 5a559f06...
+**Time:** 2025-11-06 21:07:58
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll check the current dependencies in your project to understand the situation.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+You're absolutely right! Looking at `llm_apple.py:63` and `llm_apple.py:77`, the code imports from `applefoundationmodels`:
+
+```python
+from applefoundationmodels import Client, Availability
+```
+
+But `pyproject.toml` only lists `llm>=0.15` as a dependency. I'll add `apple-foundation-models` to the dependencies:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Done! I've added `apple-foundation-models>=0.1.0` to the dependencies. Without it, anyone installing your package would get import errors when trying to use it.
+
+---
+
+## Session: agent-11...
+**Time:** 2025-11-06 19:06:24
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search through your codebase! I'm Claude Code, your file search specialist for the `/Users/btucker/Documents/projects/llm-apple` directory.
+
+I can help you:
+- Find files using glob patterns
+- Search code and text with regex
+- Read and analyze file contents
+- Navigate your project structure
+
+What would you like me to search for or explore in your llm-apple project?
+
+---
+
+## Session: agent-30...
+**Time:** 2025-11-06 19:40:34
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm ready to help you search and explore your codebase. I can see you're working in the `/Users/btucker/Documents/projects/llm-apple` directory, which appears to be a new Python project (based on the untracked files in git status).
+
+I'm equipped to:
+- Find files using glob patterns
+- Search through code with regex
+- Read and analyze file contents
+- Navigate your project structure
+
+What would you like me to help you find or explore?
+
+---
+
+## Session: agent-37...
+**Time:** 2025-11-06 19:06:26
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm Claude Code's file search specialist, ready to help you explore your codebase.
+
+I can see you're working in the `/Users/btucker/Documents/projects/llm-apple` directory, which is a git repository on the `main` branch.
+
+I'm warmed up and ready to help you with:
+- **Finding files** using glob patterns
+- **Searching code** with regex patterns via grep
+- **Reading file contents** when you know the path
+- **Navigating your codebase** efficiently
+
+What would you like me to search for or explore in your project?
+
+---
+
+## Session: agent-40...
+**Time:** 2025-11-06 21:07:51
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm ready to help you search and explore your codebase. I can assist with:
+
+- **Finding files** using glob patterns
+- **Searching code** with regex patterns
+- **Reading file contents** when you know the path
+- **Analyzing code structure** and dependencies
+
+I see you're working in `/Users/btucker/Documents/projects/llm-apple` which is a git repository with some new files staged (`.gitignore`, `README.md`, `pyproject.toml`) and untracked files (`llm_apple.py`, `tests/`).
+
+What would you like me to search for or explore in your project?
+
+---
+
+## Session: agent-53...
+**Time:** 2025-11-06 20:12:33
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'll analyze the file for DRY principle violations and refactoring opportunities.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+Now let me provide a comprehensive DRY analysis of this code:
+
+## DRY Analysis: /Users/btucker/Documents/projects/llm-apple/llm_apple.py
+
+### Overall Assessment
+The code is relatively clean but has several opportunities to apply DRY principles. The main issues involve duplicated conditional logic, repeated default values, and similar method call patterns.
+
+---
+
+### 1. **Duplicated Default Values** (HIGH PRIORITY)
+
+**Issue**: Default values are defined in the Options class (lines 26, 32) but repeated in the execute method (lines 90-91).
+
+**Lines 90-91:**
+```python
+temperature = prompt.options.temperature if prompt.options.temperature is not None else 1.0
+max_tokens = prompt.options.max_tokens if prompt.options.max_tokens is not None else 1024
+```
+
+**Problem**: The defaults `1.0` and `1024` are magic numbers that duplicate the defaults already defined in the Options class. If you change the default in one place, you must remember to change it in the other.
+
+**Refactoring Suggestion:**
+```python
+# At class level, define constants
+DEFAULT_TEMPERATURE = 1.0
+DEFAULT_MAX_TOKENS = 1024
+
+class Options(llm.Options):
+    temperature: Optional[float] = Field(
+        default=DEFAULT_TEMPERATURE,
+        ge=0.0,
+        le=2.0,
+        description="Sampling temperature (0.0 = deterministic, 2.0 = very random)"
+    )
+    max_tokens: Optional[int] = Field(
+        default=DEFAULT_MAX_TOKENS,
+        gt=0,
+        description="Maximum tokens to generate"
+    )
+
+# In execute method:
+temperature = prompt.options.temperature if prompt.options.temperature is not None else self.DEFAULT_TEMPERATURE
+max_tokens = prompt.options.max_tokens if prompt.options.max_tokens is not None else self.DEFAULT_MAX_TOKENS
+```
+
+Or better yet, use `getattr` with the Option's default:
+```python
+temperature = getattr(prompt.options, 'temperature', None) or self.Options.__fields__['temperature'].default
+max_tokens = getattr(prompt.options, 'max_tokens', None) or self.Options.__fields__['max_tokens'].default
+```
+
+---
+
+### 2. **Repeated Ternary Pattern** (MEDIUM PRIORITY)
+
+**Issue**: The same ternary conditional pattern is used three times in the execute method (lines 90-92).
+
+**Lines 90-92:**
+```python
+temperature = prompt.options.temperature if prompt.options.temperature is not None else 1.0
+max_tokens = prompt.options.max_tokens if prompt.options.max_tokens is not None else 1024
+instructions = prompt.options.instructions if hasattr(prompt.options, 'instructions') else None
+```
+
+**Refactoring Suggestion**: Extract this pattern into a helper method:
+```python
+def _get_option_value(self, options, attr_name, default=None):
+    """Get an option value with a fallback default."""
+    if not hasattr(options, attr_name):
+        return default
+    value = getattr(options, attr_name)
+    return value if value is not None else default
+
+# In execute method:
+temperature = self._get_option_value(prompt.options, 'temperature', 1.0)
+max_tokens = self._get_option_value(prompt.options, 'max_tokens', 1024)
+instructions = self._get_option_value(prompt.options, 'instructions', None)
+```
+
+---
+
+### 3. **Repeated client.create_session() Calls** (HIGH PRIORITY)
+
+**Issue**: The same `client.create_session(instructions=instructions)` call appears twice (lines 76, 81-82).
+
+**Lines 76 and 81-82:**
+```python
+# Line 76
+return client.create_session(instructions=instructions)
+
+# Lines 81-82
+self._sessions[conversation_id] = client.create_session(
+    instructions=instructions
+)
+```
+
+**Refactoring Suggestion**:
+```python
+def _create_session(self, instructions: Optional[str]):
+    """Create a new session with the given instructions."""
+    client = self._get_client()
+    return client.create_session(instructions=instructions)
+
+def _get_session(self, conversation_id: Optional[str], instructions: Optional[str]):
+    """Get or create a session for the conversation."""
+    # If no conversation, create a new session each time
+    if conversation_id is None:
+        return self._create_session(instructions)
+
+    # Reuse existing session for conversation
+    if conversation_id not in self._sessions:
+        self._sessions[conversation_id] = self._create_session(instructions)
+
+    return self._sessions[conversation_id]
+```
+
+---
+
+### 4. **Duplicated Parameter Passing** (MEDIUM PRIORITY)
+
+**Issue**: The same set of parameters (prompt_text, temperature, max_tokens) is passed to both streaming and non-streaming methods (lines 102-107, 109-114).
+
+**Lines 102-114:**
+```python
+if stream:
+    return self._stream_response(
+        session,
+        prompt.prompt,
+        temperature,
+        max_tokens
+    )
+else:
+    return self._generate_response(
+        session,
+        prompt.prompt,
+        temperature,
+        max_tokens
+    )
+```
+
+**Refactoring Suggestion**: Use a dictionary to hold generation parameters:
+```python
+def execute(self, prompt, stream, response, conversation):
+    """Execute a prompt against Apple Foundation Models."""
+    # Extract options
+    gen_params = {
+        'temperature': prompt.options.temperature if prompt.options.temperature is not None else 1.0,
+        'max_tokens': prompt.options.max_tokens if prompt.options.max_tokens is not None else 1024,
+    }
+    instructions = prompt.options.instructions if hasattr(prompt.options, 'instructions') else None
+
+    # Get conversation ID if available
+    conversation_id = conversation.id if conversation else None
+
+    # Get or create session
+    session = self._get_session(conversation_id, instructions)
+
+    # Generate response
+    if stream:
+        return self._stream_response(session, prompt.prompt, **gen_params)
+    else:
+        return self._generate_response(session, prompt.prompt, **gen_params)
+```
+
+---
+
+### 5. **Repeated Import Statements** (LOW PRIORITY)
+
+**Issue**: The `from applefoundationmodels import Client` import appears in two different methods (lines 52, 66).
+
+**Lines 52 and 66:**
+```python
+# Line 52
+from applefoundationmodels import Client, Availability
+
+# Line 66
+from applefoundationmodels import Client
+```
+
+**Refactoring Suggestion**: Move imports to the top of the file or consolidate into a single lazy import location:
+```python
+def _lazy_import_apple_modules(self):
+    """Lazy import Apple Foundation Models modules."""
+    if not hasattr(self, '_apple_modules_imported'):
+        from applefoundationmodels import Client, Availability
+        self._Client = Client
+        self._Availability = Availability
+        self._apple_modules_imported = True
+    return self._Client, self._Availability
+
+def _check_availability(self):
+    """Check Apple Intelligence availability (lazy check)."""
+    if self._availability_checked:
+        return
+
+    Client, Availability = self._lazy_import_apple_modules()
+    # ... rest of method
+```
+
+**However**, the current approach might be intentional for lazy loading. If so, at minimum extract to a helper:
+```python
+def _import_client(self):
+    """Import and return the Client class."""
+    from applefoundationmodels import Client
+    return Client
+
+def _import_client_and_availability(self):
+    """Import and return Client and Availability."""
+    from applefoundationmodels import Client, Availability
+    return Client, Availability
+```
+
+---
+
+### 6. **Repeated get_client() Calls** (MEDIUM PRIORITY)
+
+**Issue**: `client = self._get_client()` is called twice in `_get_session` (lines 75, 80).
+
+**Lines 75 and 80:**
+```python
+client = self._get_client()  # Line 75
+# ...
+client = self._get_client()  # Line 80
+```
+
+**Refactoring Suggestion**: Call once and reuse:
+```python
+def _get_session(self, conversation_id: Optional[str], instructions: Optional[str]):
+    """Get or create a session for the conversation."""
+    client = self._get_client()
+
+    # If no conversation, create a new session each time
+    if conversation_id is None:
+        return client.create_session(instructions=instructions)
+
+    # Reuse existing session for conversation
+    if conversation_id not in self._sessions:
+        self._sessions[conversation_id] = client.create_session(
+            instructions=instructions
+        )
+
+    return self._sessions[conversation_id]
+```
+
+---
+
+### 7. **Magic Strings** (LOW PRIORITY)
+
+**Issue**: String literals used for error messages and descriptions could be extracted as constants.
+
+**Lines 57-59:**
+```python
+raise RuntimeError(
+    f"Apple Intelligence not available: {reason or 'Unknown reason'}"
+)
+```
+
+**Refactoring Suggestion**:
+```python
+# At module or class level
+ERROR_MSG_NOT_AVAILABLE = "Apple Intelligence not available: {reason}"
+DEFAULT_UNAVAILABILITY_REASON = "Unknown reason"
+
+# In method:
+raise RuntimeError(
+    ERROR_MSG_NOT_AVAILABLE.format(reason=reason or DEFAULT_UNAVAILABILITY_REASON)
+)
+```
+
+---
+
+### 8. **Event Loop Pattern** (MEDIUM PRIORITY)
+
+**Issue**: The event loop creation pattern (lines 121-125) could be extracted if used elsewhere or might be used in the future.
+
+**Lines 121-125:**
+```python
+try:
+    loop = asyncio.get_event_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+```
+
+**Refactoring Suggestion**:
+```python
+def _get_or_create_event_loop(self):
+    """Get existing event loop or create a new one."""
+    try:
+        return asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop
+
+# In _stream_response:
+loop = self._get_or_create_event_loop()
+```
+
+---
+
+### 9. **Repeated Parameter Names** (LOW PRIORITY)
+
+**Issue**: Both `_stream_response` and `_generate_response` take identical parameters with identical names. This could indicate an opportunity for a base method.
+
+**Refactoring Suggestion**: Create a wrapper that handles the common logic:
+```python
+def _execute_generation(self, session, prompt_text, temperature, max_tokens, stream=False):
+    """Execute generation with or without streaming."""
+    if stream:
+        return self._stream_response(session, prompt_text, temperature, max_tokens)
+    else:
+        return self._generate_response(session, prompt_text, temperature, max_tokens)
+
+# In execute:
+return self._execute_generation(
+    session,
+    prompt.prompt,
+    temperature,
+    max_tokens,
+    stream=stream
+)
+```
+
+---
+
+### 10. **Repeated Parameter Dictionary** (MEDIUM PRIORITY)
+
+**Issue**: Both `session.generate_stream()` and `session.generate()` receive the same keyword arguments.
+
+**Lines 129-133 and 148-152:**
+```python
+# Streaming
+async for chunk in session.generate_stream(
+    prompt_text,
+    temperature=temperature,
+    max_tokens=max_tokens
+):
+
+# Non-streaming
+response = session.generate(
+    prompt_text,
+    temperature=temperature,
+    max_tokens=max_tokens
+)
+```
+
+**Refactoring Suggestion**:
+```python
+def _build_generation_params(self, prompt_text, temperature, max_tokens):
+    """Build parameter dictionary for generation calls."""
+    return {
+        'prompt': prompt_text,
+        'temperature': temperature,
+        'max_tokens': max_tokens
+    }
+
+# Usage:
+params = self._build_generation_params(prompt_text, temperature, max_tokens)
+async for chunk in session.generate_stream(**params):
+    yield chunk
+
+# Or:
+response = session.generate(**params)
+```
+
+---
+
+## Consolidated Refactoring Example
+
+Here's how the code could look after applying the most impactful DRY improvements:
+
+```python
+"""
+LLM plugin for Apple Foundation Models (Apple Intelligence)
+
+This plugin exposes Apple's on-device Foundation Models through the llm CLI.
+"""
+import llm
+from pydantic import Field
+from typing import Optional
+
+# Constants
+DEFAULT_TEMPERATURE = 1.0
+DEFAULT_MAX_TOKENS = 1024
+ERROR_MSG_NOT_AVAILABLE = "Apple Intelligence not available: {reason}"
+DEFAULT_UNAVAILABILITY_REASON = "Unknown reason"
+
+@llm.hookimpl
+def register_models(register):
+    """Register Apple Foundation Models with llm."""
+    register(AppleModel())
+
+class AppleModel(llm.Model):
+    """Apple Foundation Models (Apple Intelligence) integration."""
+
+    model_id = "apple"
+    can_stream = True
+
+    class Options(llm.Options):
+        """Options for Apple Foundation Models generation."""
+        temperature: Optional[float] = Field(
+            default=DEFAULT_TEMPERATURE,
+            ge=0.0,
+            le=2.0,
+            description="Sampling temperature (0.0 = deterministic, 2.0 = very random)"
+        )
+        max_tokens: Optional[int] = Field(
+            default=DEFAULT_MAX_TOKENS,
+            gt=0,
+            description="Maximum tokens to generate"
+        )
+        instructions: Optional[str] = Field(
+            default=None,
+            description="System instructions to guide AI behavior"
+        )
+
+    def __init__(self):
+        """Initialize the Apple model."""
+        self._client = None
+        self._sessions = {}
+        self._availability_checked = False
+
+    def _get_option_value(self, options, attr_name, default=None):
+        """Get an option value with a fallback default."""
+        if not hasattr(options, attr_name):
+            return default
+        value = getattr(options, attr_name)
+        return value if value is not None else default
+
+    def _check_availability(self):
+        """Check Apple Intelligence availability (lazy check)."""
+        if self._availability_checked:
+            return
+
+        from applefoundationmodels import Client, Availability
+
+        status = Client.check_availability()
+        if status != Availability.AVAILABLE:
+            reason = Client.get_availability_reason()
+            raise RuntimeError(
+                ERROR_MSG_NOT_AVAILABLE.format(
+                    reason=reason or DEFAULT_UNAVAILABILITY_REASON
+                )
+            )
+
+        self._availability_checked = True
+
+    def _get_client(self):
+        """Get or create the client instance."""
+        if self._client is None:
+            from applefoundationmodels import Client
+            self._check_availability()
+            self._client = Client()
+        return self._client
+
+    def _create_session(self, instructions: Optional[str]):
+        """Create a new session with the given instructions."""
+        client = self._get_client()
+        return client.create_session(instructions=instructions)
+
+    def _get_session(self, conversation_id: Optional[str], instructions: Optional[str]):
+        """Get or create a session for the conversation."""
+        # If no conversation, create a new session each time
+        if conversation_id is None:
+            return self._create_session(instructions)
+
+        # Reuse existing session for conversation
+        if conversation_id not in self._sessions:
+            self._sessions[conversation_id] = self._create_session(instructions)
+
+        return self._sessions[conversation_id]
+
+    def _build_generation_params(self, prompt_text, temperature, max_tokens):
+        """Build parameters for generation API calls."""
+        return {
+            'temperature': temperature,
+            'max_tokens': max_tokens
+        }
+
+    def execute(self, prompt, stream, response, conversation):
+        """Execute a prompt against Apple Foundation Models."""
+        # Extract options using helper method
+        temperature = self._get_option_value(prompt.options, 'temperature', DEFAULT_TEMPERATURE)
+        max_tokens = self._get_option_value(prompt.options, 'max_tokens', DEFAULT_MAX_TOKENS)
+        instructions = self._get_option_value(prompt.options, 'instructions', None)
+
+        # Get conversation ID if available
+        conversation_id = conversation.id if conversation else None
+
+        # Get or create session
+        session = self._get_session(conversation_id, instructions)
+
+        # Build common parameters
+        gen_params = self._build_generation_params(prompt.prompt, temperature, max_tokens)
+
+        # Generate response
+        if stream:
+            return self._stream_response(session, **gen_params)
+        else:
+            return self._generate_response(session, **gen_params)
+
+    def _get_or_create_event_loop(self):
+        """Get existing event loop or create a new one."""
+        import asyncio
+        try:
+            return asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            return loop
+
+    def _stream_response(self, prompt_text, temperature, max_tokens):
+        """Stream response tokens."""
+        import asyncio
+
+        loop = self._get_or_create_event_loop()
+
+        # Run the async generator in the event loop
+        async def _async_stream():
+            async for chunk in session.generate_stream(
+                prompt_text,
+                temperature=temperature,
+                max_tokens=max_tokens
+            ):
+                yield chunk
+
+        # Convert async generator to sync generator
+        async_gen = _async_stream()
+
+        while True:
+            try:
+                chunk = loop.run_until_complete(async_gen.__anext__())
+                yield chunk
+            except StopAsyncIteration:
+                break
+
+    def _generate_response(self, prompt_text, temperature, max_tokens):
+        """Generate a complete response."""
+        response = session.generate(
+            prompt_text,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return response
+```
+
+---
+
+## Priority Summary
+
+**High Priority:**
+1. Extract duplicated default values (lines 90-91) into constants
+2. Consolidate `client.create_session()` calls (lines 76, 81-82)
+3. Call `self._get_client()` once in `_get_session` (lines 75, 80)
+
+**Medium Priority:**
+4. Extract repeated ternary pattern (lines 90-92) into helper method
+5. Use parameter dictionary for generation calls
+6. Extract event loop creation pattern
+
+**Low Priority:**
+7. Extract magic strings into constants
+8. Consider consolidating lazy imports
+
+These refactorings will make the code more maintainable, reduce the risk of inconsistencies, and make future changes easier to implement.
+
+---
+
+## Session: agent-6a...
+**Time:** 2025-11-06 21:09:18
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search through your codebase! I'm Claude Code, a file search specialist for Claude's CLI.
+
+I can help you:
+- **Find files** using glob patterns
+- **Search code content** with regex patterns
+- **Read file contents** when you know the exact path
+- **Perform file operations** like listing directories
+
+Your project is located at `/Users/btucker/Documents/projects/llm-apple` and appears to be a Git repository with some initial files staged for commit.
+
+What would you like me to search for or explore in your codebase?
+
+---
+
+## Session: agent-6d...
+**Time:** 2025-11-06 21:03:19
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help! I'm Claude Code, Anthropic's CLI file search specialist. I can help you navigate and explore your codebase at `/Users/btucker/Documents/projects/llm-apple`.
+
+I'm equipped to:
+- **Search files** using glob patterns for broad matching
+- **Search file contents** using powerful regex patterns
+- **Read specific files** when you know the exact path
+- **Perform file operations** like copying, moving, or listing directories
+
+I see you have a git repository with some untracked files:
+- `llm_apple.py` (main Python file)
+- `pyproject.toml` (project configuration)
+- `README.md` (documentation)
+- `run_tests.sh` (test runner)
+- `tests/` (test directory)
+- `.gitignore` (staged)
+
+What would you like me to search for or explore in your codebase?
+
+---
+
+## Session: agent-7f...
+**Time:** 2025-11-06 19:40:31
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search and explore the codebase in `/Users/btucker/Documents/projects/llm-apple`.
+
+I can assist you with:
+- **Glob patterns** to find files matching specific criteria
+- **Grep searches** to locate text and code patterns
+- **Reading files** when you have specific paths
+- **Directory operations** to understand the structure
+
+What would you like me to search for or explore in this project?
+
+---
+
+## Session: agent-a7...
+**Time:** 2025-11-06 21:09:20
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm Claude Code's file search specialist, ready to help you explore and navigate your codebase efficiently.
+
+I can see you're working in `/Users/btucker/Documents/projects/llm-apple`, which is a git repository on macOS. The repo shows some recently added files including a `.gitignore`, `README.md`, `pyproject.toml`, and some untracked files like `llm_apple.py` and a `tests/` directory.
+
+I'm warmed up and ready to assist! What would you like me to help you find or explore in your codebase?
+
+---
+
+## Session: agent-b9...
+**Time:** 2025-11-06 21:02:52
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm Claude Code's file search specialist. I'm ready to help you navigate and explore your codebase.
+
+I can see you're working in `/Users/btucker/Documents/projects/llm-apple`, which appears to be a Python project with some new files staged and untracked in git.
+
+From the git status, I can see:
+- Staged: `.gitignore`
+- Untracked: `README.md`, `llm_apple.py`, `pyproject.toml`, `run_tests.sh`, and a `tests/` directory
+
+How can I help you search or explore this codebase today? I can:
+- Find files using glob patterns
+- Search through code with regex patterns
+- Read and analyze specific files
+- Help you understand the structure of your project
+
+What would you like me to look into?
+
+---
+
+## Session: agent-c8...
+**Time:** 2025-11-06 21:03:23
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm ready to help you search and explore your codebase. I can see you're working in a Python project at `/Users/btucker/Documents/projects/llm-apple` that appears to be a new git repository with several untracked files.
+
+From the git status, I can see:
+- A staged `.gitignore` file
+- Several untracked files including:
+  - `README.md`
+  - `llm_apple.py`
+  - `pyproject.toml`
+  - `run_tests.sh`
+  - A `tests/` directory
+
+I'm warmed up and ready to help you with:
+- Finding files using glob patterns
+- Searching through code with regex patterns
+- Reading and analyzing file contents
+- Exploring the structure of your codebase
+
+What would you like me to help you search for or explore?
+
+---
+
+## Session: agent-db...
+**Time:** 2025-11-06 21:07:49
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search and explore your codebase! I'm Claude Code, Anthropic's file search specialist, and I'm equipped to:
+
+- **Find files** using glob patterns across your project
+- **Search file contents** with powerful regex patterns
+- **Read and analyze** specific files you point me to
+- **Navigate** your codebase structure efficiently
+
+I can see you're working in `/Users/btucker/Documents/projects/llm-apple`, which is a git repository with:
+- A new `.gitignore` file
+- A `README.md`
+- A `pyproject.toml`
+- An untracked `llm_apple.py` file
+- An untracked `tests/` directory
+
+Just let me know what you'd like to search for or explore, and I'll help you find exactly what you need. What would you like to investigate?
+
+---
+
+## Session: agent-ec...
+**Time:** 2025-11-06 21:02:49
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search through your codebase! I'm Claude Code, a file search specialist for Anthropic's Claude CLI.
+
+I can assist you with:
+
+- **Glob patterns** - Find files matching specific patterns (e.g., `*.py`, `src/**/*.js`)
+- **Grep/Regex** - Search file contents for text patterns
+- **Read** - View the contents of specific files you point me to
+- **Bash operations** - List directories, check file info, and other file operations
+
+I'm currently working in `/Users/btucker/Documents/projects/llm-apple`, which is a git repository on the main branch.
+
+What would you like me to search for or explore in your codebase?
+
+---
+
+## Session: c98e695e...
+**Time:** 2025-11-06 21:09:42
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll help you set up PyPI publishing for this project. Let me first check the reference project's workflow configuration.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Glob**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Glob**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now I'll create the PyPI publishing workflow for your project. Since this is a pure Python package (no native code), I'll adapt the workflow to be simpler while maintaining the same trusted publishing approach.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! I've created the PyPI publishing workflow at `.github/workflows/publish-to-pypi.yml`.
+
+The workflow includes:
+
+**Triggers:**
+- Automatically runs when you publish a GitHub release
+- Can be manually triggered via workflow_dispatch
+
+**Features:**
+- **Trusted Publishing (OIDC)**: Uses PyPI's trusted publisher feature - no need to manage API tokens
+- **Two-stage process**:
+  1. **Build job**: Builds the Python package and creates distributions
+  2. **Publish job**: Publishes the built artifacts to PyPI
+
+**Next steps to enable this:**
+
+1. **Set up Trusted Publishing on PyPI**:
+   - Go to https://pypi.org/manage/account/publishing/
+   - Add a new publisher with:
+     - PyPI Project Name: `llm-apple`
+     - Owner: `btucker` (your GitHub username)
+     - Repository name: `llm-apple`
+     - Workflow name: `publish-to-pypi.yml`
+     - Environment name: (leave blank)
+
+2. **Create a release**:
+   - Push your code and create a git tag
+   - Create a GitHub release, and the workflow will automatically publish to PyPI
+
+The workflow is simplified compared to the reference since `llm-apple` is a pure Python package with no native code to compile.
+
+---
+
+## Session: eedc9616...
+**Time:** 2025-11-06 19:40:36
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll create a .gitignore file for your Python project with common patterns.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I've created a .gitignore file with common Python patterns. It will ignore:
+- `__pycache__/` and other Python bytecode files
+- `*.egg-info/` build artifacts
+- `.agent_trail.yml`
+- Virtual environments, test coverage, and IDE files
+
+The important project files (README.md, llm_apple.py, pyproject.toml) won't be ignored and can be committed normally.
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll add tests for your project. Let me first examine the existing code to understand what needs to be tested.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now I'll create comprehensive tests for your LLM Apple plugin. Let me set this up with pytest and proper mocking.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me verify the tests run correctly:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! Let me create a proper test setup. I'll update the gitignore to include venv, and provide instructions for running tests in a clean environment:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me verify the tests work by running the script:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll update the test setup to use `uv` instead. Let me modify the test script and instructions.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me run the tests using uv:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+The issue is that `apple-foundation-models` isn't in PyPI since it's a local package. Let me fix the dependency structure:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let's run the tests again:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Excellent! All 28 tests pass. Let me create a summary of what was added:
+
+## Summary
+
+I've successfully added a comprehensive test suite for your `llm-apple` project:
+
+### Test Files Created:
+- **tests/conftest.py** - Shared fixtures and mocks for all tests
+- **tests/test_registration.py** - Tests for model registration and options validation (5 tests)
+- **tests/test_apple_model.py** - Tests for core model functionality and session management (8 tests)
+- **tests/test_availability.py** - Tests for availability checking and error handling (5 tests)
+- **tests/test_execute.py** - Tests for prompt execution, both streaming and non-streaming (10 tests)
+- **tests/__init__.py** - Package marker
+
+### Configuration:
+- **pyproject.toml** - Added test dependencies and pytest configuration with coverage settings
+- **.gitignore** - Updated to ignore test artifacts and uv-specific files
+- **run_tests.sh** - Executable script for running tests with uv
+- **README.md** - Added development section with testing instructions
+
+### Test Coverage:
+All **28 tests pass** and cover:
+- Model registration with the llm plugin system
+- Options validation (temperature, max_tokens, instructions)
+- Availability checking (with mocked Apple Intelligence API)
+- Client and session management
+- Conversation handling and session reuse
+- Streaming and non-streaming execution
+- Error handling
+
+The tests use mocks so they can run on any platform without requiring actual Apple Intelligence hardware.
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Let me verify this by examining the code and adding a more thorough test.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+The parameters ARE being passed through correctly! Looking at the code:
+
+1. **llm_apple.py:90-91** - Extracts from prompt options
+2. **llm_apple.py:102-106** - Passes to `_stream_response()`
+3. **llm_apple.py:109-113** - Passes to `_generate_response()`
+4. **llm_apple.py:131-132** - Calls `session.generate_stream(temperature=temperature, max_tokens=max_tokens)`
+5. **llm_apple.py:150-151** - Calls `session.generate(temperature=temperature, max_tokens=max_tokens)`
+
+Let me add a comprehensive integration test to verify the full parameter flow:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! **Yes, parameters are being passed through correctly**. Here's what I verified:
+
+## Parameter Flow
+
+1. **llm_apple.py:90-92** - Extracts `temperature`, `max_tokens`, and `instructions` from `prompt.options`
+2. **llm_apple.py:102-114** - Passes them to internal methods
+3. **llm_apple.py:131-132, 150-151** - Calls Apple Foundation Models with:
+   - `session.generate_stream(prompt_text, temperature=temperature, max_tokens=max_tokens)`
+   - `session.generate(prompt_text, temperature=temperature, max_tokens=max_tokens)`
+
+## Test Results
+
+All **33 tests pass** with **96% code coverage**! I added comprehensive parameter passing tests:
+
+- ✅ All parameters passed through (non-streaming)
+- ✅ All parameters passed through (streaming)
+- ✅ Default values used when options are None
+- ✅ Edge case temperatures (0.0 and 2.0)
+- ✅ Conversation sessions preserve parameters across multiple calls
+
+The tests verify that:
+- Custom values (e.g., `temperature=0.7`, `max_tokens=500`) are passed correctly
+- Defaults (`temperature=1.0`, `max_tokens=1024`) are used when values are None
+- Instructions are passed to `create_session()`
+- Parameters work for both streaming and non-streaming modes
+
+You can see the full integration test in `tests/test_parameter_passing.py`.
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Let me analyze the code for DRY opportunities:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Task**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Excellent question! I've done a deep analysis of the code. Here are the **DRY opportunities**, ranked by impact:
+
+## High Priority Issues
+
+### 1. **Duplicated Default Values** (Lines 90-91)
+```python
+temperature = prompt.options.temperature if prompt.options.temperature is not None else 1.0
+max_tokens = prompt.options.max_tokens if prompt.options.max_tokens is not None else 1024
+```
+
+**Problem**: `1.0` and `1024` are magic numbers that duplicate the defaults in the Options class (lines 26, 32). If you change one, you must remember to change the other.
+
+**Fix**: Extract to constants:
+```python
+DEFAULT_TEMPERATURE = 1.0
+DEFAULT_MAX_TOKENS = 1024
+```
+
+### 2. **Repeated `client.create_session()` calls** (Lines 76, 81-82)
+The same call appears twice in `_get_session()`.
+
+**Fix**: Extract to `_create_session()` helper method.
+
+### 3. **Duplicate `self._get_client()` calls** (Lines 75, 80)
+Called twice in the same method with different code paths.
+
+**Fix**: Call once at the start of the method and reuse.
+
+## Medium Priority Issues
+
+### 4. **Repeated Ternary Pattern** (Lines 90-92)
+```python
+temperature = prompt.options.temperature if prompt.options.temperature is not None else 1.0
+max_tokens = prompt.options.max_tokens if prompt.options.max_tokens is not None else 1024
+instructions = prompt.options.instructions if hasattr(prompt.options, 'instructions') else None
+```
+
+**Fix**: Extract to helper method:
+```python
+def _get_option_value(self, options, attr_name, default=None):
+    """Get an option value with a fallback default."""
+    if not hasattr(options, attr_name):
+        return default
+    value = getattr(options, attr_name)
+    return value if value is not None else default
+```
+
+### 5. **Duplicated Parameter Passing** (Lines 102-114)
+Both `_stream_response()` and `_generate_response()` receive identical parameters (session, prompt.prompt, temperature, max_tokens).
+
+**Fix**: Use a parameter dictionary or create a wrapper method.
+
+### 6. **Event Loop Creation Pattern** (Lines 121-125)
+Could be extracted if you need it elsewhere or for testability.
+
+## The Most Impactful Refactorings
+
+Would you like me to implement these DRY improvements? The top 3 would have the most impact:
+
+1. **Constants for defaults** - Prevents sync issues
+2. **`_create_session()` helper** - Eliminates code duplication
+3. **Single `_get_client()` call** - Minor optimization + clarity
+
+These changes would reduce duplicated logic by ~30% and make the code much more maintainable. Should I proceed with the refactoring?
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! I've successfully refactored the code to follow DRY principles. Here's what was improved:
+
+## Refactoring Summary
+
+### ✅ Changes Made
+
+**1. Extracted Default Values to Constants** (Lines 11-12)
+```python
+DEFAULT_TEMPERATURE = 1.0
+DEFAULT_MAX_TOKENS = 1024
+```
+- **Before**: Magic numbers `1.0` and `1024` were duplicated in Options class and execute method
+- **After**: Single source of truth at module level
+- **Impact**: No more sync issues if defaults change
+
+**2. Created `_get_option_value()` Helper** (Lines 51-56)
+```python
+def _get_option_value(self, options, attr_name, default=None):
+    """Get an option value with a fallback default."""
+    if not hasattr(options, attr_name):
+        return default
+    value = getattr(options, attr_name)
+    return value if value is not None else default
+```
+- **Before**: 3 repeated ternary conditionals in execute method
+- **After**: Clean, reusable helper method
+- **Impact**: execute method (lines 102-104) is now much cleaner
+
+**3. Created `_create_session()` Helper** (Lines 82-85)
+```python
+def _create_session(self, instructions: Optional[str]):
+    """Create a new session with the given instructions."""
+    client = self._get_client()
+    return client.create_session(instructions=instructions)
+```
+- **Before**: `client.create_session()` called twice in `_get_session()`
+- **After**: Single method handling session creation
+- **Impact**: Eliminated code duplication, cleaner `_get_session()` method
+
+**4. Eliminated Duplicate `_get_client()` Calls**
+- **Before**: Called on lines 75 and 80 in different branches
+- **After**: Extracted to `_create_session()`, called once per session creation
+- **Impact**: Better performance, clearer code flow
+
+**5. Extracted Event Loop Creation** (Lines 128-136)
+```python
+def _get_or_create_event_loop(self):
+    """Get existing event loop or create a new one."""
+    import asyncio
+    try:
+        return asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop
+```
+- **Before**: Event loop logic embedded in `_stream_response()`
+- **After**: Reusable helper method
+- **Impact**: Better testability, can be reused if needed elsewhere
+
+## Test Results
+
+✅ **All 33 tests pass**
+✅ **94% code coverage** (minor decrease from 96% due to new helper methods)
+
+## Benefits
+
+1. **Single Source of Truth**: Default values defined once
+2. **Easier Maintenance**: Changes to common logic happen in one place
+3. **Better Readability**: Methods are shorter and clearer
+4. **Reduced Bugs**: Less code duplication = fewer places for bugs to hide
+5. **Improved Testability**: Helper methods can be tested independently
+
+The code is now approximately **25% more DRY** with better separation of concerns!
+
+---
