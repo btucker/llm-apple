@@ -77,18 +77,13 @@ response = model.prompt(
     tools=[llm.Tool(
         name="get_weather",
         description="Get current weather for a location",
-        input_schema={
-            "type": "object",
-            "properties": {
-                "location": {"type": "string"}
-            },
-            "required": ["location"]
-        },
         implementation=get_weather
     )]
 )
 print(response.text())
 ```
+
+**Note**: The `input_schema` parameter is optional. If not provided, the schema will be auto-generated from the function's type hints.
 
 #### Tool Types Supported
 
@@ -128,14 +123,26 @@ def get_temperature(city: str, units: str = "celsius") -> str:
 You can register multiple tools in a single call:
 
 ```python
+def get_time() -> str:
+    """Get the current time."""
+    return "2:30 PM"
+
+def get_date() -> str:
+    """Get the current date."""
+    return "November 7, 2024"
+
+def get_weather(location: str) -> str:
+    """Get weather for a location."""
+    return f"Weather in {location}: 72°F, sunny"
+
 tools = [
-    llm.Tool(name="get_time", description="Get current time", ...),
-    llm.Tool(name="get_date", description="Get current date", ...),
-    llm.Tool(name="get_weather", description="Get weather", ...),
+    llm.Tool(name="get_time", description="Get current time", implementation=get_time),
+    llm.Tool(name="get_date", description="Get current date", implementation=get_date),
+    llm.Tool(name="get_weather", description="Get weather", implementation=get_weather),
 ]
 
 response = model.prompt(
-    "What's the date, time, and weather?",
+    "What's the date, time, and weather in Paris?",
     tools=tools
 )
 ```
