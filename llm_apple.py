@@ -206,6 +206,11 @@ class AppleModel(llm.Model):
             # (can't add tools to existing session)
             session = self._create_session(system_prompt)
             self._register_tools_with_session(session, prompt.tools)
+
+            # Store the tool-enabled session for this conversation
+            # so subsequent turns reuse it instead of reverting to old session
+            if conversation_id is not None:
+                self._sessions[conversation_id] = session
         else:
             # Get or create session (may reuse for conversations)
             session = self._get_session(conversation_id, system_prompt)

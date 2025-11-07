@@ -107,13 +107,17 @@ class TestToolCallingIntegration:
             operations = {
                 "add": x + y,
                 "addition": x + y,
+                "+": x + y,
                 "subtract": x - y,
                 "subtraction": x - y,
+                "-": x - y,
                 "multiply": x * y,
                 "multiplication": x * y,
                 "times": x * y,
+                "*": x * y,
                 "divide": x // y if y != 0 else "undefined",
-                "division": x // y if y != 0 else "undefined"
+                "division": x // y if y != 0 else "undefined",
+                "/": x // y if y != 0 else "undefined"
             }
             result = operations.get(operation, "unknown operation")
             return f"Result: {result}"
@@ -141,9 +145,9 @@ class TestToolCallingIntegration:
             # Verify tool was called with correct arguments
             call = call_tracker.get_call(0)
             assert call['x'] == 15 and call['y'] == 7, f"Expected x=15, y=7 but got {call}"
-            # Model may use "multiply", "multiplication", or "times"
+            # Model may use "multiply", "multiplication", "times", or "*"
             op = call['operation'].lower()
-            assert 'multipl' in op or 'times' in op, f"Expected multiplication operation but got {call['operation']}"
+            assert 'multipl' in op or 'times' in op or op == '*', f"Expected multiplication operation but got {call['operation']}"
         else:
             print("  (Tool was not called - model calculated directly or analyzed tool code)")
 
