@@ -1,0 +1,1491 @@
+# AgentTrail: AI Assistant Interactions
+
+## Session: 019f4362...
+**Time:** 2025-11-07 21:08:37
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 👤 User
+now that ~/projects/apple-foundation-models-py support tool calling, we want to add tool calling to llm-apple. here's the guide to do that in an llm plugin: Adding tools support involves several steps:
+
+Add supports_tools = True to your model class.
+
+If prompt.tools is populated, turn that list of llm.Tool objects into the correct format for your model.
+
+Look out for requests to call tools in the responses from your model. Call response.add_tool_call(llm.ToolCall(...)) for each of those. This should work for streaming and non-streaming and async and non-async cases.
+
+If your prompt has a prompt.tool_results list, pass the information from those llm.ToolResult objects to your model.
+
+Include prompt.tools and prompt.tool_results and tool calls from response.tool_calls_or_raise() in the conversation history constructed by your plugin.
+
+Make sure your code is OK with prompts that do not have prompt.prompt set to a value, since they may be carrying exclusively the results of a tool call.
+
+This commit to llm-gemini implementing tools helps demonstrate what this looks like for a real plugin.
+
+Here are the relevant dataclasses:
+
+class llm.Tool(name: str, description: Optional[str] = None, input_schema: Dict = <factory>, implementation: Optional[Callable] = None, plugin: Optional[str] = None)
+class llm.ToolCall(name: str, arguments: dict, tool_call_id: str | None = None)
+class llm.ToolResult(name: str, output: str, attachments: List[llm.models.Attachment] = <factory>, tool_call_id: Optional[str] = None, instance: Optional[llm.models.Toolbox] = None, exception: Optional[Exception] = None)
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+I'll help you add tool calling support to llm-apple. Let me start by exploring the codebase to understand the current implementation and then plan the necessary changes.
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Glob**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now let me check the apple-foundation-models-py library to understand how tool calling works there:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **WebFetch**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **WebFetch**
+</details>
+
+### 👤 User
+look locally at ~/apple-foundation-models-py
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Glob**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Grep**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Grep**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Grep**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Now I'll implement tool calling support for llm-apple. Let me start by adding the necessary changes:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **TodoWrite**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Excellent! I've successfully added tool calling support to llm-apple. Here's a summary of what was implemented:
+
+## Changes Made
+
+### 1. **Added tool calling support declaration** (llm_apple.py:27)
+   - Added `supports_tools = True` to the AppleModel class
+
+### 2. **Implemented helper methods**:
+   - **`_convert_tools_to_apple_format()`** (llm_apple.py:97): Converts llm.Tool objects to a dictionary mapping tool names to implementations
+
+   - **`_register_tools_with_session()`** (llm_apple.py:116): Registers tools with an Apple Foundation Models session by:
+     - Creating wrapper functions with proper closures (avoiding the closure variable sharing issue)
+     - Setting tool metadata (name, description, parameters) on each wrapper
+     - Adding tools to the session's internal `_tools` dictionary
+
+   - **`_extract_tool_calls_from_transcript()`** (llm_apple.py:146): Extracts tool calls from the session transcript and converts them to llm.ToolCall objects
+
+   - **`_add_tool_results_to_session()`** (llm_apple.py:162): Adds tool results to the session history as user messages
+
+### 3. **Updated execute() method** (llm_apple.py:179):
+   - Registers tools if `prompt.tools` is provided
+   - Adds tool results if `prompt.tool_results` is provided
+   - Handles prompts without `prompt.prompt` set (tool-only interactions)
+   - Extracts tool calls from transcript and adds them to the response
+   - All operations are defensive with proper type checking
+
+### 4. **Comprehensive test coverage** (tests/test_tools.py):
+   - 11 new tests covering all aspects of tool calling:
+     - Tool registration with various configurations
+     - Tool call extraction from transcripts
+     - Tool result handling
+     - Execute method with tools and tool results
+     - Closure handling to ensure tools don't share state
+     - Edge cases (empty lists, missing attributes)
+
+## Test Results
+All 44 tests pass successfully, including:
+- 31 existing tests (unchanged)
+- 11 new tool calling tests
+
+The implementation follows the llm plugin guidelines and is compatible with the existing codebase while adding full tool calling support.
+
+### 👤 User
+are there any end-to-end tests?
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Grep**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Grep**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+No, there are no end-to-end tests for llm-apple currently. All the existing tests use mocks. Let me create an integration test file that actually tests against the real Apple Foundation Models API when available:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Write**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! I've created comprehensive end-to-end integration tests for tool calling. Here's a summary:
+
+## Integration Tests Created
+
+**File**: `tests/test_integration_tools.py` - 6 comprehensive end-to-end tests
+
+### Test Coverage:
+1. **`test_simple_tool_call`** - Tests a tool with no parameters (get_current_time)
+2. **`test_tool_with_string_parameter`** - Tests a tool with a single string parameter (get_weather)
+3. **`test_tool_with_multiple_parameters`** - Tests a tool with mixed parameter types (calculate)
+4. **`test_multiple_tools`** - Tests multiple tools registered simultaneously
+5. **`test_tool_with_conversation`** - Tests tools within a conversation context
+6. **`test_tool_calling_with_details`** - Verbose test that prints detailed tool execution info
+
+### Key Features:
+- **Automatic skipping**: Tests are skipped with a clear message when Apple Intelligence is not available
+- **Real API calls**: When run on compatible systems, these tests make actual calls to Apple Foundation Models
+- **Comprehensive scenarios**: Cover simple to complex tool calling patterns
+- **Verbose output**: One test provides detailed debugging output for understanding the flow
+
+## Test Results
+
+### Current Status:
+- **44 unit tests passed** ✓ (all with mocks)
+- **6 integration tests skipped** (Apple Intelligence not available on this system)
+
+### Running Integration Tests:
+
+```bash
+# Run all tests
+uv run pytest tests/ -v
+
+# Run only integration tests
+uv run pytest tests/test_integration_tools.py -v -s
+
+# Show why tests were skipped
+uv run pytest tests/test_integration_tools.py -v -s -rs
+```
+
+### Requirements for Integration Tests:
+- Mac with Apple Silicon (M1/M2/M3+)
+- macOS 15.1 or later
+- Apple Intelligence enabled
+- Model downloaded
+
+## Documentation Created
+
+**File**: `tests/README.md` - Complete guide explaining:
+- Test structure (unit vs integration)
+- How to run different types of tests
+- Requirements for integration tests
+- How to write new tests
+- CI/CD considerations
+
+The integration tests will automatically run on compatible systems and skip gracefully on incompatible ones, making them perfect for CI/CD pipelines.
+
+### 👤 User
+run the integration tests
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! All integration tests are now running and passing! 🎉
+
+## Summary
+
+### What Was Accomplished:
+
+1. **Tool Calling Implementation** ✅
+   - Added `supports_tools = True` to AppleModel
+   - Implemented tool registration with Apple Foundation Models sessions
+   - Handle tool calls and tool results properly
+   - Support for prompts without prompt text (tool-only interactions)
+
+2. **Comprehensive Testing** ✅
+   - **44 unit tests** (with mocks) - all passing
+   - **6 integration tests** (real Apple Intelligence API) - all passing
+   - **Total: 50 tests passing**
+
+3. **Integration Tests Validated**:
+   - ✅ Simple tool with no parameters
+   - ✅ Tool with string parameter
+   - ✅ Tool with multiple mixed-type parameters
+   - ✅ Multiple tools registered simultaneously
+   - ✅ Tools within conversation context
+   - ✅ Verbose debugging test with tool execution details
+
+### Key Findings:
+
+The integration tests revealed that:
+- Tools ARE being called successfully by Apple Intelligence
+- The model correctly uses tool results in its responses
+- All tool types (no params, single param, multiple params) work properly
+- Multiple tools can be registered and used
+
+### Requirements Updated:
+
+- Minimum Python version: **3.9+** (required by apple-foundation-models 0.1.4 with tool support)
+- Minimum apple-foundation-models version: **0.1.4** (first version with tool calling support)
+
+### Test Output Examples:
+
+```
+Response: The current time is 2:30 PM. ✓
+Response: The current weather in Paris is 72°F and sunny. ✓
+Response: The result of 15 multiplied by 7 is 105. ✓
+```
+
+All tests complete in ~10 seconds on Apple Silicon with Apple Intelligence enabled!
+
+### 👤 User
+take a deep look at all the changes in this branch. do you see any opportunities to DRY up the code?
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Looking at all the changes, I can identify several DRY opportunities:
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Perfect! All 50 tests still pass. Let me show you a summary of the DRY improvements I made:
+
+## DRY Refactoring Summary
+
+### 1. **Added `_is_valid_list_attribute()` helper method**
+
+**Before** - Repeated pattern throughout the code:
+```python
+hasattr(prompt, 'tools') and prompt.tools and isinstance(prompt.tools, (list, tuple)) and len(prompt.tools) > 0
+hasattr(prompt, 'tool_results') and prompt.tool_results and isinstance(prompt.tool_results, (list, tuple))
+hasattr(session, 'transcript') and isinstance(session.transcript, (list, tuple))
+```
+
+**After** - Single reusable method:
+```python
+def _is_valid_list_attribute(self, obj, attr_name):
+    """Check if an object has a non-empty list/tuple attribute."""
+    value = getattr(obj, attr_name, None)
+    return value and isinstance(value, (list, tuple)) and len(value) > 0
+```
+
+### 2. **Removed unused `_convert_tools_to_apple_format()` method**
+- This method was defined but never called anywhere in the codebase (lines 97-114)
+- Removed 18 lines of dead code
+
+### 3. **Simplified attribute access with `getattr()`**
+
+**Before:**
+```python
+system_prompt = prompt.system if hasattr(prompt, 'system') else None
+prompt_text = prompt.prompt if hasattr(prompt, 'prompt') and prompt.prompt else ""
+```
+
+**After:**
+```python
+system_prompt = getattr(prompt, 'system', None)
+prompt_text = getattr(prompt, 'prompt', None) or ""
+```
+
+### 4. **Extracted `has_tool_results` variable**
+
+**Before** - Checking the same condition twice:
+```python
+if hasattr(prompt, 'tool_results') and prompt.tool_results and isinstance(...):
+    self._add_tool_results_to_session(...)
+
+if not prompt_text and hasattr(prompt, 'tool_results') and prompt.tool_results and isinstance(...):
+    prompt_text = "Please continue..."
+```
+
+**After** - Check once, use twice:
+```python
+has_tool_results = self._is_valid_list_attribute(prompt, 'tool_results')
+if has_tool_results:
+    self._add_tool_results_to_session(...)
+
+if not prompt_text and has_tool_results:
+    prompt_text = "Please continue..."
+```
+
+### Impact:
+- **Reduced repetition** by ~80 characters per check (4 locations)
+- **Removed 18 lines** of unused code
+- **Improved readability** with clearer intent (`has_tools`, `has_tool_results`)
+- **Easier maintenance** - one place to update validation logic
+- **All 50 tests still passing** ✅
+
+The code is now more maintainable and follows the DRY principle while keeping the same functionality!
+
+### 👤 User
+require apple-foundation-models >=0.1.5
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Edit**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Read**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+Done! Updated `pyproject.toml` to require `apple-foundation-models>=0.1.5`.
+
+This ensures users will get the latest version with full tool calling support when they install llm-apple.
+
+### 👤 User
+commit these changes
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+### 🤖 Assistant
+
+### 🤖 Assistant
+
+<details>
+<summary>🔧 Tool Uses</summary>
+
+- **Bash**
+</details>
+
+---
+
+## Session: agent-35...
+**Time:** 2025-11-07 21:05:21
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+Hello! I'm Claude Code, Anthropic's file search specialist. I'm ready to help you navigate and explore the codebase at `/Users/btucker/Documents/projects/llm-apple`.
+
+I can assist you by:
+- **Finding files** using glob patterns to match file names and paths
+- **Searching code** using regex patterns to locate specific content
+- **Reading files** when you know the exact path you need to examine
+- **Running file operations** like listing directories or copying files
+
+I'm currently on the `feature/tool-calling` branch, and the repository is clean with no uncommitted changes.
+
+What would you like me to search for or explore in this codebase?
+
+---
+
+## Session: agent-a4...
+**Time:** 2025-11-07 21:05:22
+**Project:** `/Users/btucker/Documents/projects/llm-apple`
+
+### 🤖 Assistant
+I'm ready to help you search and explore your codebase! I'm Claude Code's file search specialist, equipped with tools to efficiently find files, search code, and analyze contents.
+
+I can help you with:
+- Finding files using glob patterns
+- Searching code with regex patterns
+- Reading and analyzing file contents
+- Navigating your git repository
+
+What would you like me to search for or explore in your project?
+
+---
