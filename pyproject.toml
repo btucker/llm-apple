@@ -5,8 +5,8 @@ description = "LLM plugin for Apple Foundation Models (Apple Intelligence)"
 readme = "README.md"
 authors = [{ name = "Ben Tucker" }]
 license = { text = "MIT" }
-requires-python = ">=3.8"
-dependencies = ["llm>=0.15", "apple-foundation-models>=0.1.0"]
+requires-python = ">=3.9"
+dependencies = ["llm>=0.15", "apple-foundation-models>=0.1.5"]
 
 [project.optional-dependencies]
 test = ["pytest>=7.0", "pytest-asyncio>=0.21.0", "pytest-cov>=4.0"]
