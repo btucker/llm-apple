@@ -61,7 +61,40 @@ llm -m apple "What is my name?" --continue conversation1
 
 The plugin supports tool calling, allowing the model to call Python functions to access real-time data, perform actions, or integrate with external systems.
 
-#### Basic Tool Usage
+#### CLI Tool Usage
+
+You can use tools from the command line using the `--functions` option:
+
+```bash
+# Define a function inline
+llm -m apple "What's the weather in Paris?" \
+  --functions 'def get_weather(location: str) -> str:
+    """Get the current weather for a location."""
+    return f"Weather in {location}: 72°F, sunny"'
+```
+
+Or load functions from a Python file:
+
+```bash
+# Create a tools.py file
+cat > tools.py << 'EOF'
+def get_current_time() -> str:
+    """Get the current time."""
+    from datetime import datetime
+    return datetime.now().strftime("%I:%M %p")
+
+def get_weather(location: str) -> str:
+    """Get weather for a location."""
+    return f"Weather in {location}: 72°F, sunny"
+EOF
+
+# Use the functions from the file
+llm -m apple "What time is it and what's the weather in Tokyo?" --functions tools.py
+```
+
+You can also use registered tool plugins with the `-T` or `--tool` flag (see [llm tool documentation](https://llm.datasette.io/en/stable/tools.html) for more details).
+
+#### Python API Tool Usage
 
 ```python
 import llm
