@@ -6,8 +6,7 @@ This plugin exposes Apple's on-device Foundation Models through the [llm](https:
 
 ## Requirements
 
-- macOS 15.1 or later
-- Apple Silicon (M1, M2, M3, or later)
+- macOS 26.0 or later
 - Apple Intelligence enabled
 - Python 3.9 or later
 - [apple-foundation-models](https://pypi.org/project/apple-foundation-models/) >= 0.1.5 installed
