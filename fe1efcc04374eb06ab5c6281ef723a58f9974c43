@@ -1,0 +1,10 @@
+- now that ~/projects/apple-foundation-models-py support tool calling, we want
+  to add tool calling to llm-apple. here's the guide to do that in an llm
+  plugin: Adding tools support involves several steps:
+- look locally at ~/apple-foundation-models-py
+- are there any end-to-end tests?
+- run the integration tests
+- take a deep look at all the changes in this branch. do you see any
+  opportunities to DRY up the code?
+- require apple-foundation-models >=0.1.5
+- commit these changes
