@@ -6,38 +6,25 @@ import llm_apple
 
 
 @pytest.fixture
-def mock_tool():
-    """Create a mock llm.Tool object."""
+def weather_tool(tool_factory):
+    """Create a sample weather tool for testing."""
     def get_weather(location: str) -> str:
         """Get the weather for a location."""
         return f"Weather in {location}: sunny, 72°F"
 
-    tool = llm.Tool(
+    return tool_factory(
         name="get_weather",
         description="Get weather for a location",
-        input_schema={
-            "type": "object",
-            "properties": {
-                "location": {"type": "string"}
-            },
-            "required": ["location"]
-        },
+        properties={"location": {"type": "string"}},
+        required=["location"],
         implementation=get_weather
     )
-    return tool
 
 
 @pytest.fixture
-def mock_session_with_transcript():
-    """Create a mock session with transcript support."""
-    session = Mock()
-    session._tools = {}
-    session._register_tools = Mock()
-    session.generate = Mock(return_value="The weather is sunny")
-    session.add_message = Mock()
-
-    # Mock transcript with tool calls
-    session.transcript = [
+def session_with_tool_transcript(session_factory):
+    """Create a mock session with tool call transcript."""
+    transcript = [
         {'type': 'prompt', 'content': 'What is the weather in Paris?'},
         {
             'type': 'tool_calls',
@@ -53,7 +40,11 @@ def mock_session_with_transcript():
         {'type': 'response', 'content': 'The weather is sunny'}
     ]
 
-    return session
+    return session_factory(
+        generate_return="The weather is sunny",
+        transcript=transcript,
+        include_tool_support=True
+    )
 
 
 def test_apple_model_supports_tools():
@@ -62,14 +53,12 @@ def test_apple_model_supports_tools():
     assert model.supports_tools is True
 
 
-def test_register_tools_with_session(mock_applefoundationmodels, mock_tool):
+def test_register_tools_with_session(mock_applefoundationmodels, weather_tool, session_factory):
     """Test that tools are properly registered with a session."""
     model = llm_apple.AppleModel()
-    session = Mock()
-    session._tools = {}
-    session._register_tools = Mock()
+    session = session_factory(include_tool_support=True)
 
-    model._register_tools_with_session(session, [mock_tool])
+    model._register_tools_with_session(session, [weather_tool])
 
     # Verify tool was added to session
     assert 'get_weather' in session._tools
@@ -79,14 +68,13 @@ def test_register_tools_with_session(mock_applefoundationmodels, mock_tool):
     registered_tool = session._tools['get_weather']
     assert registered_tool._tool_name == 'get_weather'
     assert registered_tool._tool_description == 'Get weather for a location'
-    assert registered_tool._tool_parameters == mock_tool.input_schema
+    assert registered_tool._tool_parameters == weather_tool.input_schema
 
 
-def test_register_tools_with_empty_list(mock_applefoundationmodels):
+def test_register_tools_with_empty_list(mock_applefoundationmodels, session_factory):
     """Test that registering empty tool list is a no-op."""
     model = llm_apple.AppleModel()
-    session = Mock()
-    session._tools = {}
+    session = session_factory(include_tool_support=True)
 
     model._register_tools_with_session(session, [])
 
@@ -142,11 +130,10 @@ def test_extract_tool_calls_with_no_tool_calls(mock_applefoundationmodels):
     assert len(tool_calls) == 0
 
 
-def test_add_tool_results_to_session(mock_applefoundationmodels):
+def test_add_tool_results_to_session(mock_applefoundationmodels, session_factory):
     """Test adding tool results to session."""
     model = llm_apple.AppleModel()
-    session = Mock()
-    session.add_message = Mock()
+    session = session_factory()
 
     tool_results = [
         llm.ToolResult(
@@ -169,25 +156,24 @@ def test_add_tool_results_to_session(mock_applefoundationmodels):
     session.add_message.assert_any_call("user", "Tool get_time returned: 2:30 PM")
 
 
-def test_add_tool_results_with_empty_list(mock_applefoundationmodels):
+def test_add_tool_results_with_empty_list(mock_applefoundationmodels, session_factory):
     """Test adding empty tool results list is a no-op."""
     model = llm_apple.AppleModel()
-    session = Mock()
-    session.add_message = Mock()
+    session = session_factory()
 
     model._add_tool_results_to_session(session, [])
 
     assert session.add_message.call_count == 0
 
 
-def test_execute_with_tools(mock_applefoundationmodels, mock_tool, mock_session_with_transcript):
+def test_execute_with_tools(mock_applefoundationmodels, weather_tool, session_with_tool_transcript):
     """Test execute method with tools."""
     model = llm_apple.AppleModel()
 
     # Mock the session creation to return our mock session
     model._sessions = {}
     client = model._get_client()
-    client.create_session = Mock(return_value=mock_session_with_transcript)
+    client.create_session = Mock(return_value=session_with_tool_transcript)
 
     # Create prompt with tools
     prompt = Mock()
@@ -196,7 +182,7 @@ def test_execute_with_tools(mock_applefoundationmodels, mock_tool, mock_session_
     prompt.options.temperature = 1.0
     prompt.options.max_tokens = 1024
     prompt.system = None
-    prompt.tools = [mock_tool]
+    prompt.tools = [weather_tool]
     prompt.tool_results = []
 
     response = Mock()
@@ -205,7 +191,7 @@ def test_execute_with_tools(mock_applefoundationmodels, mock_tool, mock_session_
     result = model.execute(prompt, stream=False, response=response, conversation=None)
 
     # Verify tool was registered
-    assert 'get_weather' in mock_session_with_transcript._tools
+    assert 'get_weather' in session_with_tool_transcript._tools
 
     # Verify tool calls were added to response
     assert response.add_tool_call.called
@@ -214,16 +200,15 @@ def test_execute_with_tools(mock_applefoundationmodels, mock_tool, mock_session_
     assert result == "The weather is sunny"
 
 
-def test_execute_with_tool_results(mock_applefoundationmodels):
+def test_execute_with_tool_results(mock_applefoundationmodels, session_factory):
     """Test execute method with tool results."""
     model = llm_apple.AppleModel()
 
-    session = Mock()
-    session._tools = {}
-    session._register_tools = Mock()
-    session.add_message = Mock()
-    session.generate = Mock(return_value="Based on the weather, I recommend...")
-    session.transcript = []
+    session = session_factory(
+        generate_return="Based on the weather, I recommend...",
+        transcript=[],
+        include_tool_support=True
+    )
 
     client = model._get_client()
     client.create_session = Mock(return_value=session)
@@ -257,16 +242,15 @@ def test_execute_with_tool_results(mock_applefoundationmodels):
     assert result == "Based on the weather, I recommend..."
 
 
-def test_execute_without_prompt_text_but_with_tool_results(mock_applefoundationmodels):
+def test_execute_without_prompt_text_but_with_tool_results(mock_applefoundationmodels, session_factory):
     """Test execute method when prompt.prompt is None but tool_results are present."""
     model = llm_apple.AppleModel()
 
-    session = Mock()
-    session._tools = {}
-    session._register_tools = Mock()
-    session.add_message = Mock()
-    session.generate = Mock(return_value="Continuation response")
-    session.transcript = []
+    session = session_factory(
+        generate_return="Continuation response",
+        transcript=[],
+        include_tool_support=True
+    )
 
     client = model._get_client()
     client.create_session = Mock(return_value=session)
@@ -301,7 +285,7 @@ def test_execute_without_prompt_text_but_with_tool_results(mock_applefoundationm
     assert result == "Continuation response"
 
 
-def test_tool_wrapper_closure(mock_applefoundationmodels):
+def test_tool_wrapper_closure(mock_applefoundationmodels, tool_factory, session_factory):
     """Test that tool wrappers have proper closure and don't share state."""
     model = llm_apple.AppleModel()
 
@@ -313,23 +297,21 @@ def test_tool_wrapper_closure(mock_applefoundationmodels):
         return f"tool2: {y}"
 
     tools = [
-        llm.Tool(
+        tool_factory(
             name="tool1",
             description="First tool",
-            input_schema={"type": "object", "properties": {"x": {"type": "string"}}},
+            properties={"x": {"type": "string"}},
             implementation=tool1_impl
         ),
-        llm.Tool(
+        tool_factory(
             name="tool2",
             description="Second tool",
-            input_schema={"type": "object", "properties": {"y": {"type": "string"}}},
+            properties={"y": {"type": "string"}},
             implementation=tool2_impl
         )
     ]
 
-    session = Mock()
-    session._tools = {}
-    session._register_tools = Mock()
+    session = session_factory(include_tool_support=True)
 
     model._register_tools_with_session(session, tools)
 
