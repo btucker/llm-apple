@@ -23,8 +23,11 @@ jobs:
         with:
           python-version: "3.9"
 
+      - name: Create virtual environment
+        run: uv venv
+
       - name: Install black
-        run: uv pip install --system black
+        run: uv pip install black
 
       - name: Check formatting with black
-        run: black --check .
+        run: uv run black --check .
