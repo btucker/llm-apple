@@ -44,9 +44,12 @@ class TestToolCallingIntegration:
 
     def test_simple_tool_call(self, apple_model):
         """Test calling a simple tool with no parameters."""
-        # Define a tool
+        # Track tool calls
+        calls = []
+
         def get_current_time():
             """Get the current time."""
+            calls.append({})
             return "2:30 PM"
 
         # Register the tool
@@ -67,20 +70,25 @@ class TestToolCallingIntegration:
             tools=tools
         )
 
-        # Verify we got a response
+        # Verify response exists
         assert response.text()
         response_text = response.text()
         print(f"Response: {response_text}")
 
-        # Verify the tool was used - the response should contain "2:30 PM"
-        # which is the value returned by our tool
+        # Verify the tool was actually called
+        assert len(calls) > 0, "Tool was not called"
+
+        # Verify the tool result appears in the response
         assert "2:30" in response_text, f"Tool result not in response: {response_text}"
 
     def test_tool_with_string_parameter(self, apple_model):
         """Test calling a tool that takes a string parameter."""
-        # Define a tool
+        # Track tool calls
+        calls = []
+
         def get_weather(location: str):
             """Get the weather for a location."""
+            calls.append({'location': location})
             return f"Weather in {location}: 72°F, sunny"
 
         # Register the tool
@@ -103,15 +111,29 @@ class TestToolCallingIntegration:
             tools=tools
         )
 
-        # Verify we got a response
+        # Verify response exists
         assert response.text()
-        print(f"Response: {response.text()}")
+        response_text = response.text()
+        print(f"Response: {response_text}")
+
+        # Verify tool was called
+        assert len(calls) > 0, "Tool was not called"
+
+        # Verify correct location was passed
+        assert calls[0]['location'].lower() == 'paris', f"Expected Paris, got {calls[0]['location']}"
+
+        # Verify tool result appears in response
+        assert "72" in response_text and "sunny" in response_text.lower(), \
+            f"Tool result not in response: {response_text}"
 
     def test_tool_with_multiple_parameters(self, apple_model):
         """Test calling a tool with multiple parameters."""
-        # Define a tool
+        # Track tool calls
+        calls = []
+
         def calculate(operation: str, x: int, y: int):
             """Perform a calculation."""
+            calls.append({'operation': operation, 'x': x, 'y': y})
             operations = {
                 "add": x + y,
                 "subtract": x - y,
@@ -146,19 +168,36 @@ class TestToolCallingIntegration:
             tools=tools
         )
 
-        # Verify we got a response
+        # Verify response exists
         assert response.text()
-        print(f"Response: {response.text()}")
+        response_text = response.text()
+        print(f"Response: {response_text}")
+
+        # Verify tool was called
+        assert len(calls) > 0, "Tool was not called"
+
+        # Verify correct operation and operands
+        assert calls[0]['operation'] == 'multiply', f"Expected multiply, got {calls[0]['operation']}"
+        assert calls[0]['x'] == 15, f"Expected x=15, got {calls[0]['x']}"
+        assert calls[0]['y'] == 7, f"Expected y=7, got {calls[0]['y']}"
+
+        # Verify result (15 * 7 = 105) appears in response
+        assert "105" in response_text, f"Expected 105 in response: {response_text}"
 
     def test_multiple_tools(self, apple_model):
         """Test with multiple tools registered."""
-        # Define multiple tools
+        # Track tool calls
+        time_calls = []
+        date_calls = []
+
         def get_time():
             """Get the current time."""
+            time_calls.append({})
             return "2:30 PM"
 
         def get_date():
             """Get the current date."""
+            date_calls.append({})
             return "November 7, 2024"
 
         # Register tools
@@ -191,15 +230,30 @@ class TestToolCallingIntegration:
             tools=tools
         )
 
-        # Verify we got a response
+        # Verify response exists
         assert response.text()
-        print(f"Response: {response.text()}")
+        response_text = response.text()
+        print(f"Response: {response_text}")
+
+        # Verify at least one tool was called
+        total_calls = len(time_calls) + len(date_calls)
+        assert total_calls > 0, "No tools were called"
+
+        # Verify results appear in response
+        if len(date_calls) > 0:
+            assert "november" in response_text.lower() or "7" in response_text, \
+                "Date tool result not in response"
+        if len(time_calls) > 0:
+            assert "2:30" in response_text, "Time tool result not in response"
 
     def test_tool_with_conversation(self, apple_model):
         """Test tools work within a conversation context."""
-        # Define a tool
+        # Track tool calls
+        calls = []
+
         def get_temperature(city: str):
             """Get temperature for a city."""
+            calls.append({'city': city})
             temps = {
                 "paris": "18°C",
                 "london": "15°C",
@@ -228,7 +282,13 @@ class TestToolCallingIntegration:
         )
 
         assert response1.text()
-        print(f"Turn 1: {response1.text()}")
+        response1_text = response1.text()
+        print(f"Turn 1: {response1_text}")
+
+        # Verify first call
+        assert len(calls) >= 1, "Tool not called on first turn"
+        assert calls[0]['city'].lower() == 'paris', f"Expected Paris, got {calls[0]['city']}"
+        assert "18" in response1_text, "Temperature not in first response"
 
         # Second turn in same conversation - should maintain context
         response2 = apple_model.prompt(
@@ -237,7 +297,12 @@ class TestToolCallingIntegration:
         )
 
         assert response2.text()
-        print(f"Turn 2: {response2.text()}")
+        response2_text = response2.text()
+        print(f"Turn 2: {response2_text}")
+
+        # Note: Second call may or may not happen depending on model behavior
+        # Just verify we got a meaningful response
+        assert len(response2_text) > 10, "Response too short"
 
 
 class TestToolCallingVerbose:
@@ -291,10 +356,18 @@ class TestToolCallingVerbose:
             tools=tools
         )
 
-        print(f"\n[RESPONSE] {response.text()}")
+        response_text = response.text()
+        print(f"\n[RESPONSE] {response_text}")
         print(f"\n[TOOL CALL COUNT] {call_count['count']}")
 
-        assert response.text()
+        # Verify tool was called
+        assert call_count['count'] > 0, "Tool was never called"
+
+        # Verify response contains tool results
+        assert response_text, "No response text"
+        assert "artificial intelligence" in response_text.lower() or "found" in response_text.lower() or "result" in response_text.lower(), \
+            f"Tool results not integrated into response: {response_text}"
+
         print("\n" + "=" * 70)
         print("✓ Integration test completed successfully")
         print("=" * 70)
