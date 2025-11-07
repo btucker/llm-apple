@@ -1,4 +1,5 @@
 """Pytest configuration and fixtures for llm-apple tests."""
+
 import pytest
 from unittest.mock import Mock, MagicMock, AsyncMock
 import sys
@@ -51,13 +52,13 @@ def mock_applefoundationmodels(monkeypatch, mock_client_class, mock_availability
     mock_module.Availability = mock_availability
 
     # Add to sys.modules before importing llm_apple
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     yield mock_module
 
     # Cleanup
-    if 'applefoundationmodels' in sys.modules:
-        del sys.modules['applefoundationmodels']
+    if "applefoundationmodels" in sys.modules:
+        del sys.modules["applefoundationmodels"]
 
 
 @pytest.fixture
@@ -90,6 +91,7 @@ def mock_conversation():
 # DRY Test Helpers - Phase 1
 # ============================================================================
 
+
 def create_tool(name, description, properties=None, required=None, implementation=None):
     """
     Factory function to create llm.Tool objects with less boilerplate.
@@ -110,9 +112,9 @@ def create_tool(name, description, properties=None, required=None, implementatio
         input_schema={
             "type": "object",
             "properties": properties or {},
-            "required": required or []
+            "required": required or [],
         },
-        implementation=implementation
+        implementation=implementation,
     )
 
 
@@ -155,11 +157,13 @@ class CallTracker:
             actual_value = actual[key]
             # Case-insensitive comparison for strings
             if isinstance(expected_value, str) and isinstance(actual_value, str):
-                assert actual_value.lower() == expected_value.lower(), \
-                    f"Expected {key}={expected_value}, got {actual_value}"
+                assert (
+                    actual_value.lower() == expected_value.lower()
+                ), f"Expected {key}={expected_value}, got {actual_value}"
             else:
-                assert actual_value == expected_value, \
-                    f"Expected {key}={expected_value}, got {actual_value}"
+                assert (
+                    actual_value == expected_value
+                ), f"Expected {key}={expected_value}, got {actual_value}"
 
 
 @pytest.fixture
@@ -168,9 +172,9 @@ def call_tracker():
     return CallTracker()
 
 
-def create_mock_session(generate_return="Generated response",
-                       transcript=None,
-                       include_tool_support=True):
+def create_mock_session(
+    generate_return="Generated response", transcript=None, include_tool_support=True
+):
     """
     Factory function to create mock sessions with configurable behavior.
 
@@ -222,8 +226,9 @@ def assert_response_contains(response, *expected_strings, case_sensitive=True):
     for expected in expected_strings:
         search_text = response_text if case_sensitive else response_text.lower()
         search_expected = expected if case_sensitive else expected.lower()
-        assert search_expected in search_text, \
-            f"Expected '{expected}' in response: {response_text}"
+        assert (
+            search_expected in search_text
+        ), f"Expected '{expected}' in response: {response_text}"
 
     return response_text
 

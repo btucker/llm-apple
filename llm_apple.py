@@ -3,6 +3,7 @@ LLM plugin for Apple Foundation Models (Apple Intelligence)
 
 This plugin exposes Apple's on-device Foundation Models through the llm CLI.
 """
+
 import llm
 from pydantic import Field
 from typing import Optional, Dict, Any
@@ -28,16 +29,15 @@ class AppleModel(llm.Model):
 
     class Options(llm.Options):
         """Options for Apple Foundation Models generation."""
+
         temperature: Optional[float] = Field(
             default=DEFAULT_TEMPERATURE,
             ge=0.0,
             le=2.0,
-            description="Sampling temperature (0.0 = deterministic, 2.0 = very random)"
+            description="Sampling temperature (0.0 = deterministic, 2.0 = very random)",
         )
         max_tokens: Optional[int] = Field(
-            default=DEFAULT_MAX_TOKENS,
-            gt=0,
-            description="Maximum tokens to generate"
+            default=DEFAULT_MAX_TOKENS, gt=0, description="Maximum tokens to generate"
         )
 
     def __init__(self):
@@ -87,6 +87,7 @@ class AppleModel(llm.Model):
         """Get or create the client instance."""
         if self._client is None:
             from applefoundationmodels import Client
+
             self._check_availability()
             self._client = Client()
         return self._client
@@ -121,12 +122,14 @@ class AppleModel(llm.Model):
 
         def create_tool_wrapper(implementation):
             """Factory function to create tool wrapper with proper closure."""
+
             def wrapper(*args, **kwargs):
                 return implementation(*args, **kwargs)
+
             return wrapper
 
         # Ensure _tools dict exists
-        if not hasattr(session, '_tools'):
+        if not hasattr(session, "_tools"):
             session._tools = {}
 
         # Add all tools to the session
@@ -143,7 +146,7 @@ class AppleModel(llm.Model):
             session._tools[tool.name] = tool_func
 
         # Register all tools at once with the FFI layer
-        if hasattr(session, '_register_tools') and len(session._tools) > 0:
+        if hasattr(session, "_register_tools") and len(session._tools) > 0:
             session._register_tools()
 
     def _extract_tool_calls_from_transcript(self, transcript: list) -> list:
@@ -159,13 +162,15 @@ class AppleModel(llm.Model):
         tool_calls = []
 
         for entry in transcript:
-            if entry.get('type') == 'tool_calls':
-                for call in entry.get('tool_calls', []):
-                    tool_calls.append(llm.ToolCall(
-                        name=call.get('name', ''),
-                        arguments=json.loads(call.get('arguments', '{}')),
-                        tool_call_id=call.get('id')
-                    ))
+            if entry.get("type") == "tool_calls":
+                for call in entry.get("tool_calls", []):
+                    tool_calls.append(
+                        llm.ToolCall(
+                            name=call.get("name", ""),
+                            arguments=json.loads(call.get("arguments", "{}")),
+                            tool_call_id=call.get("id"),
+                        )
+                    )
 
         return tool_calls
 
@@ -189,17 +194,21 @@ class AppleModel(llm.Model):
     def execute(self, prompt, stream, response, conversation):
         """Execute a prompt against Apple Foundation Models."""
         # Extract options using helper method
-        temperature = self._get_option_value(prompt.options, 'temperature', DEFAULT_TEMPERATURE)
-        max_tokens = self._get_option_value(prompt.options, 'max_tokens', DEFAULT_MAX_TOKENS)
+        temperature = self._get_option_value(
+            prompt.options, "temperature", DEFAULT_TEMPERATURE
+        )
+        max_tokens = self._get_option_value(
+            prompt.options, "max_tokens", DEFAULT_MAX_TOKENS
+        )
 
         # Use llm's built-in system prompt support
-        system_prompt = getattr(prompt, 'system', None)
+        system_prompt = getattr(prompt, "system", None)
 
         # Get conversation ID if available
         conversation_id = conversation.id if conversation else None
 
         # Check if we have tools - if so, we need a fresh session with tools
-        has_tools = self._is_valid_list_attribute(prompt, 'tools')
+        has_tools = self._is_valid_list_attribute(prompt, "tools")
 
         if has_tools:
             # Create a new session specifically for tool calling
@@ -216,12 +225,12 @@ class AppleModel(llm.Model):
             session = self._get_session(conversation_id, system_prompt)
 
         # Add tool results to session if provided
-        has_tool_results = self._is_valid_list_attribute(prompt, 'tool_results')
+        has_tool_results = self._is_valid_list_attribute(prompt, "tool_results")
         if has_tool_results:
             self._add_tool_results_to_session(session, prompt.tool_results)
 
         # Get the actual prompt text (may be None for tool-only prompts)
-        prompt_text = getattr(prompt, 'prompt', None) or ""
+        prompt_text = getattr(prompt, "prompt", None) or ""
 
         # If we have no prompt text but have tool results, create a continuation prompt
         if not prompt_text and has_tool_results:
@@ -230,21 +239,15 @@ class AppleModel(llm.Model):
         # Generate response
         if stream:
             result = self._stream_response(
-                session,
-                prompt_text,
-                temperature,
-                max_tokens
+                session, prompt_text, temperature, max_tokens
             )
         else:
             result = self._generate_response(
-                session,
-                prompt_text,
-                temperature,
-                max_tokens
+                session, prompt_text, temperature, max_tokens
             )
 
         # Extract tool calls from transcript and add to response
-        transcript = getattr(session, 'transcript', None)
+        transcript = getattr(session, "transcript", None)
         if transcript and isinstance(transcript, (list, tuple)):
             tool_calls = self._extract_tool_calls_from_transcript(transcript)
             for tool_call in tool_calls:
@@ -255,6 +258,7 @@ class AppleModel(llm.Model):
     def _get_or_create_event_loop(self):
         """Get existing event loop or create a new one."""
         import asyncio
+
         try:
             return asyncio.get_event_loop()
         except RuntimeError:
@@ -271,9 +275,7 @@ class AppleModel(llm.Model):
         # Run the async generator in the event loop
         async def _async_stream():
             async for chunk in session.generate_stream(
-                prompt_text,
-                temperature=temperature,
-                max_tokens=max_tokens
+                prompt_text, temperature=temperature, max_tokens=max_tokens
             ):
                 yield chunk
 
@@ -290,8 +292,6 @@ class AppleModel(llm.Model):
     def _generate_response(self, session, prompt_text, temperature, max_tokens):
         """Generate a complete response."""
         response = session.generate(
-            prompt_text,
-            temperature=temperature,
-            max_tokens=max_tokens
+            prompt_text, temperature=temperature, max_tokens=max_tokens
         )
         return response
