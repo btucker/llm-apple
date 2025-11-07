@@ -116,13 +116,12 @@ response = model.prompt(
 print(response.text())
 ```
 
-**Note**: The `input_schema` parameter is optional. If not provided, the schema will be auto-generated from the function's type hints.
-
 #### Tool Types Supported
 
 Tools can have various parameter signatures:
 
 **No parameters:**
+
 ```python
 def get_current_time() -> str:
     """Get the current time."""
@@ -130,6 +129,7 @@ def get_current_time() -> str:
 ```
 
 **Single parameter:**
+
 ```python
 def search_docs(query: str) -> str:
     """Search documentation."""
@@ -137,6 +137,7 @@ def search_docs(query: str) -> str:
 ```
 
 **Multiple parameters with mixed types:**
+
 ```python
 def calculate(operation: str, x: int, y: int) -> str:
     """Perform a calculation."""
@@ -145,6 +146,7 @@ def calculate(operation: str, x: int, y: int) -> str:
 ```
 
 **Optional parameters:**
+
 ```python
 def get_temperature(city: str, units: str = "celsius") -> str:
     """Get temperature for a city."""
