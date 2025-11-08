@@ -1,4 +1,5 @@
 """Tests for AppleModel.execute method."""
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 import asyncio
@@ -10,10 +11,7 @@ def test_execute_non_streaming(mock_applefoundationmodels, mock_prompt, mock_res
     model = llm_apple.AppleModel()
 
     result = model.execute(
-        prompt=mock_prompt,
-        stream=False,
-        response=mock_response,
-        conversation=None
+        prompt=mock_prompt, stream=False, response=mock_response, conversation=None
     )
 
     assert result == "Generated response"
@@ -24,10 +22,7 @@ def test_execute_streaming(mock_applefoundationmodels, mock_prompt, mock_respons
     model = llm_apple.AppleModel()
 
     result = model.execute(
-        prompt=mock_prompt,
-        stream=True,
-        response=mock_response,
-        conversation=None
+        prompt=mock_prompt, stream=True, response=mock_response, conversation=None
     )
 
     # Result should be a generator
@@ -36,7 +31,9 @@ def test_execute_streaming(mock_applefoundationmodels, mock_prompt, mock_respons
     assert chunks == ["chunk1", "chunk2", "chunk3"]
 
 
-def test_execute_with_conversation(mock_applefoundationmodels, mock_prompt, mock_response, mock_conversation):
+def test_execute_with_conversation(
+    mock_applefoundationmodels, mock_prompt, mock_response, mock_conversation
+):
     """Test execute method with conversation context."""
     model = llm_apple.AppleModel()
 
@@ -44,7 +41,7 @@ def test_execute_with_conversation(mock_applefoundationmodels, mock_prompt, mock
         prompt=mock_prompt,
         stream=False,
         response=mock_response,
-        conversation=mock_conversation
+        conversation=mock_conversation,
     )
 
     # Should reuse session for conversation
@@ -64,19 +61,12 @@ def test_execute_with_custom_temperature(mock_applefoundationmodels, mock_respon
     prompt.options.instructions = None
 
     result = model.execute(
-        prompt=prompt,
-        stream=False,
-        response=mock_response,
-        conversation=None
+        prompt=prompt, stream=False, response=mock_response, conversation=None
     )
 
     # Verify session.generate was called with temperature
     session = model._get_session(None, None)
-    session.generate.assert_called_with(
-        "Test",
-        temperature=0.5,
-        max_tokens=1024
-    )
+    session.generate.assert_called_with("Test", temperature=0.5, max_tokens=1024)
 
 
 def test_execute_with_custom_max_tokens(mock_applefoundationmodels, mock_response):
@@ -91,18 +81,11 @@ def test_execute_with_custom_max_tokens(mock_applefoundationmodels, mock_respons
     prompt.options.instructions = None
 
     result = model.execute(
-        prompt=prompt,
-        stream=False,
-        response=mock_response,
-        conversation=None
+        prompt=prompt, stream=False, response=mock_response, conversation=None
     )
 
     session = model._get_session(None, None)
-    session.generate.assert_called_with(
-        "Test",
-        temperature=1.0,
-        max_tokens=500
-    )
+    session.generate.assert_called_with("Test", temperature=1.0, max_tokens=500)
 
 
 def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
@@ -117,10 +100,7 @@ def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
     prompt.options.max_tokens = 1024
 
     result = model.execute(
-        prompt=prompt,
-        stream=False,
-        response=mock_response,
-        conversation=None
+        prompt=prompt, stream=False, response=mock_response, conversation=None
     )
 
     # Verify session was created with system prompt
@@ -128,7 +108,7 @@ def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
     # Should have called create_session with instructions
     called_with_instructions = False
     for call in client.create_session.call_args_list:
-        if call[1].get('instructions') == "You are helpful":
+        if call[1].get("instructions") == "You are helpful":
             called_with_instructions = True
             break
 
@@ -146,19 +126,12 @@ def test_execute_default_options(mock_applefoundationmodels, mock_response):
     prompt.options.max_tokens = None
 
     result = model.execute(
-        prompt=prompt,
-        stream=False,
-        response=mock_response,
-        conversation=None
+        prompt=prompt, stream=False, response=mock_response, conversation=None
     )
 
     # Should use defaults: temperature=1.0, max_tokens=1024
     session = model._get_session(None, None)
-    session.generate.assert_called_with(
-        "Test",
-        temperature=1.0,
-        max_tokens=1024
-    )
+    session.generate.assert_called_with("Test", temperature=1.0, max_tokens=1024)
 
 
 def test_generate_response_calls_session_generate(mock_applefoundationmodels):
@@ -168,17 +141,12 @@ def test_generate_response_calls_session_generate(mock_applefoundationmodels):
     session.generate = Mock(return_value="response text")
 
     result = model._generate_response(
-        session=session,
-        prompt_text="Test prompt",
-        temperature=0.7,
-        max_tokens=512
+        session=session, prompt_text="Test prompt", temperature=0.7, max_tokens=512
     )
 
     assert result == "response text"
     session.generate.assert_called_once_with(
-        "Test prompt",
-        temperature=0.7,
-        max_tokens=512
+        "Test prompt", temperature=0.7, max_tokens=512
     )
 
 
@@ -196,22 +164,21 @@ def test_stream_response_yields_chunks(mock_applefoundationmodels):
     session.generate_stream = Mock(return_value=mock_async_gen())
 
     # Get streaming results
-    chunks = list(model._stream_response(
-        session=session,
-        prompt_text="Test",
-        temperature=1.0,
-        max_tokens=100
-    ))
+    chunks = list(
+        model._stream_response(
+            session=session, prompt_text="Test", temperature=1.0, max_tokens=100
+        )
+    )
 
     assert chunks == ["a", "b", "c"]
     session.generate_stream.assert_called_once_with(
-        "Test",
-        temperature=1.0,
-        max_tokens=100
+        "Test", temperature=1.0, max_tokens=100
     )
 
 
-def test_execute_multiple_conversations(mock_applefoundationmodels, mock_prompt, mock_response):
+def test_execute_multiple_conversations(
+    mock_applefoundationmodels, mock_prompt, mock_response
+):
     """Test execute maintains separate sessions for different conversations."""
     model = llm_apple.AppleModel()
 
@@ -223,18 +190,12 @@ def test_execute_multiple_conversations(mock_applefoundationmodels, mock_prompt,
 
     # Execute with first conversation
     model.execute(
-        prompt=mock_prompt,
-        stream=False,
-        response=mock_response,
-        conversation=conv1
+        prompt=mock_prompt, stream=False, response=mock_response, conversation=conv1
     )
 
     # Execute with second conversation
     model.execute(
-        prompt=mock_prompt,
-        stream=False,
-        response=mock_response,
-        conversation=conv2
+        prompt=mock_prompt, stream=False, response=mock_response, conversation=conv2
     )
 
     # Should have two separate sessions

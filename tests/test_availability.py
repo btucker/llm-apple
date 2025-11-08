@@ -1,4 +1,5 @@
 """Tests for Apple Intelligence availability checking."""
+
 import pytest
 from unittest.mock import Mock, patch
 import sys
@@ -15,7 +16,7 @@ def test_availability_check_when_available():
     mock_module.Client.check_availability = Mock(return_value=1)
     mock_module.Client.get_availability_reason = Mock(return_value=None)
 
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     try:
         model = llm_apple.AppleModel()
@@ -23,7 +24,7 @@ def test_availability_check_when_available():
         model._check_availability()
         assert model._availability_checked is True
     finally:
-        del sys.modules['applefoundationmodels']
+        del sys.modules["applefoundationmodels"]
 
 
 def test_availability_check_when_unavailable():
@@ -39,7 +40,7 @@ def test_availability_check_when_unavailable():
         return_value="Device not supported"
     )
 
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     try:
         model = llm_apple.AppleModel()
@@ -50,7 +51,7 @@ def test_availability_check_when_unavailable():
         assert "Apple Intelligence not available" in str(exc_info.value)
         assert "Device not supported" in str(exc_info.value)
     finally:
-        del sys.modules['applefoundationmodels']
+        del sys.modules["applefoundationmodels"]
 
 
 def test_availability_check_unavailable_no_reason():
@@ -63,7 +64,7 @@ def test_availability_check_unavailable_no_reason():
     mock_module.Client.check_availability = Mock(return_value=0)
     mock_module.Client.get_availability_reason = Mock(return_value=None)
 
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     try:
         model = llm_apple.AppleModel()
@@ -74,7 +75,7 @@ def test_availability_check_unavailable_no_reason():
         assert "Apple Intelligence not available" in str(exc_info.value)
         assert "Unknown reason" in str(exc_info.value)
     finally:
-        del sys.modules['applefoundationmodels']
+        del sys.modules["applefoundationmodels"]
 
 
 def test_get_client_propagates_availability_error():
@@ -85,11 +86,9 @@ def test_get_client_propagates_availability_error():
     mock_module.Availability.AVAILABLE = 1
     mock_module.Client = Mock()
     mock_module.Client.check_availability = Mock(return_value=0)
-    mock_module.Client.get_availability_reason = Mock(
-        return_value="Not enabled"
-    )
+    mock_module.Client.get_availability_reason = Mock(return_value="Not enabled")
 
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     try:
         model = llm_apple.AppleModel()
@@ -100,7 +99,7 @@ def test_get_client_propagates_availability_error():
         assert "Apple Intelligence not available" in str(exc_info.value)
         assert "Not enabled" in str(exc_info.value)
     finally:
-        del sys.modules['applefoundationmodels']
+        del sys.modules["applefoundationmodels"]
 
 
 def test_availability_lazy_check():
@@ -112,7 +111,7 @@ def test_availability_lazy_check():
     mock_module.Client = Mock()
     mock_module.Client.check_availability = Mock(return_value=1)
 
-    sys.modules['applefoundationmodels'] = mock_module
+    sys.modules["applefoundationmodels"] = mock_module
 
     try:
         # Creating model should not check availability
@@ -125,4 +124,4 @@ def test_availability_lazy_check():
         assert mock_module.Client.check_availability.call_count == 1
         assert model._availability_checked is True
     finally:
-        del sys.modules['applefoundationmodels']
+        del sys.modules["applefoundationmodels"]

@@ -1,4 +1,5 @@
 """Tests for AppleModel class."""
+
 import pytest
 from unittest.mock import Mock, patch
 import llm_apple
