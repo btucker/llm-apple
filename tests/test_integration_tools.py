@@ -34,10 +34,8 @@ def apple_model():
 
 
 @pytest.fixture
-def conversation(tmp_path):
+def conversation():
     """Create a temporary conversation."""
-    # Use a temporary database for testing
-    db_path = tmp_path / "test.db"
     return llm.Conversation(model=llm.get_model("apple"))
 
 
