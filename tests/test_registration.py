@@ -1,4 +1,5 @@
 """Tests for model registration."""
+
 import pytest
 from unittest.mock import Mock
 import llm_apple
@@ -6,7 +7,7 @@ import llm_apple
 
 def test_register_models():
     """Test that register_models function exists and is callable."""
-    assert hasattr(llm_apple, 'register_models')
+    assert hasattr(llm_apple, "register_models")
     assert callable(llm_apple.register_models)
 
 
@@ -30,7 +31,7 @@ def test_apple_model_has_correct_attributes():
 
     assert model.model_id == "apple"
     assert model.can_stream is True
-    assert hasattr(model, 'Options')
+    assert hasattr(model, "Options")
 
 
 def test_apple_model_options():
@@ -38,10 +39,7 @@ def test_apple_model_options():
     from pydantic import ValidationError
 
     # Valid options
-    options = llm_apple.AppleModel.Options(
-        temperature=1.0,
-        max_tokens=500
-    )
+    options = llm_apple.AppleModel.Options(temperature=1.0, max_tokens=500)
     assert options.temperature == 1.0
     assert options.max_tokens == 500
 

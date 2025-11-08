@@ -1,4 +1,5 @@
 """Integration tests to verify parameters are correctly passed through."""
+
 import pytest
 from unittest.mock import Mock, call
 import llm_apple
@@ -21,10 +22,7 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
 
     # Execute
     model.execute(
-        prompt=prompt,
-        stream=False,
-        response=response,
-        conversation=conversation
+        prompt=prompt, stream=False, response=response, conversation=conversation
     )
 
     # Get the session that was created
@@ -38,9 +36,7 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
 
     # Verify session.generate was called with correct parameters
     session.generate.assert_called_once_with(
-        "Test prompt text",
-        temperature=0.7,
-        max_tokens=500
+        "Test prompt text", temperature=0.7, max_tokens=500
     )
 
 
@@ -61,10 +57,7 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
 
     # Execute streaming
     result = model.execute(
-        prompt=prompt,
-        stream=True,
-        response=response,
-        conversation=conversation
+        prompt=prompt, stream=True, response=response, conversation=conversation
     )
 
     # Consume the generator
@@ -81,9 +74,7 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
 
     # Verify session.generate_stream was called with correct parameters
     session.generate_stream.assert_called_once_with(
-        "Streaming test",
-        temperature=1.5,
-        max_tokens=2048
+        "Streaming test", temperature=1.5, max_tokens=2048
     )
 
 
@@ -102,23 +93,14 @@ def test_default_values_when_options_none(mock_applefoundationmodels):
     response = Mock()
 
     # Execute
-    model.execute(
-        prompt=prompt,
-        stream=False,
-        response=response,
-        conversation=None
-    )
+    model.execute(prompt=prompt, stream=False, response=response, conversation=None)
 
     # Get session
     client = model._get_client()
     session = client.create_session.return_value
 
     # Verify defaults were used (1.0 for temperature, 1024 for max_tokens)
-    session.generate.assert_called_once_with(
-        "Test",
-        temperature=1.0,
-        max_tokens=1024
-    )
+    session.generate.assert_called_once_with("Test", temperature=1.0, max_tokens=1024)
 
 
 def test_edge_case_temperatures(mock_applefoundationmodels):
@@ -168,7 +150,9 @@ def test_conversation_session_reuse_preserves_parameters(mock_applefoundationmod
     prompt1.options.temperature = 0.5
     prompt1.options.max_tokens = 100
 
-    model.execute(prompt=prompt1, stream=False, response=Mock(), conversation=conversation)
+    model.execute(
+        prompt=prompt1, stream=False, response=Mock(), conversation=conversation
+    )
 
     # Second call to same conversation with different parameters
     prompt2 = Mock()
@@ -178,7 +162,9 @@ def test_conversation_session_reuse_preserves_parameters(mock_applefoundationmod
     prompt2.options.temperature = 1.2
     prompt2.options.max_tokens = 500
 
-    model.execute(prompt=prompt2, stream=False, response=Mock(), conversation=conversation)
+    model.execute(
+        prompt=prompt2, stream=False, response=Mock(), conversation=conversation
+    )
 
     # Get the shared session
     session = model._sessions["conv-123"]
@@ -190,10 +176,10 @@ def test_conversation_session_reuse_preserves_parameters(mock_applefoundationmod
 
     # First call
     assert call1[0][0] == "First"
-    assert call1[1]['temperature'] == 0.5
-    assert call1[1]['max_tokens'] == 100
+    assert call1[1]["temperature"] == 0.5
+    assert call1[1]["max_tokens"] == 100
 
     # Second call
     assert call2[0][0] == "Second"
-    assert call2[1]['temperature'] == 1.2
-    assert call2[1]['max_tokens'] == 500
+    assert call2[1]["temperature"] == 1.2
+    assert call2[1]["max_tokens"] == 500
