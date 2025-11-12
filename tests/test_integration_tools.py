@@ -335,6 +335,115 @@ class TestToolCallingVerbose:
         print("=" * 70)
 
 
+class TestAsyncToolCallingIntegration:
+    """Integration tests for async model tool calling with real Apple Intelligence."""
+
+    @pytest.mark.asyncio
+    async def test_async_simple_streaming(self):
+        """Test async model with streaming."""
+        async_model = llm.get_async_model("apple")
+
+        print("\n[ASYNC STREAMING TEST]")
+        print("Response: ", end="", flush=True)
+
+        chunks = []
+        async for chunk in async_model.prompt("Count to 3 briefly", stream=True):
+            print(chunk, end="", flush=True)
+            chunks.append(chunk)
+
+        print()  # New line after streaming
+
+        assert len(chunks) > 0, "No chunks received from streaming"
+        full_text = "".join(chunks)
+        assert len(full_text) > 0, "Empty response from streaming"
+
+    @pytest.mark.asyncio
+    async def test_async_with_tools(self, tool_factory, call_tracker):
+        """Test async model with tool calling."""
+
+        def get_current_time():
+            """Get the current time."""
+            call_tracker.track()
+            return "2:30 PM"
+
+        tools = [
+            tool_factory(
+                name="get_current_time",
+                description="Get the current time",
+                properties={},
+                required=[],
+                implementation=get_current_time,
+            )
+        ]
+
+        async_model = llm.get_async_model("apple")
+
+        print("\n[ASYNC TOOL CALLING TEST]")
+        response = await async_model.prompt("What time is it?", tools=tools)
+        response_text = await response.text()
+
+        print(f"Response: {response_text}")
+
+        # Tool should have been called or result should contain time info
+        if call_tracker.was_called():
+            print("  (Tool was called)")
+            assert "2:30" in response_text or "time" in response_text.lower()
+        else:
+            # Model may have answered without calling tool
+            print("  (Tool not called - model answered directly)")
+
+    @pytest.mark.asyncio
+    async def test_async_streaming_with_tools(self, tool_factory, call_tracker):
+        """Test async model with streaming and tool calling."""
+
+        def calculate(expression: str) -> str:
+            """Evaluate a mathematical expression."""
+            call_tracker.track(expression=expression)
+            # Simple calculator
+            try:
+                result = eval(expression)
+                return str(result)
+            except:
+                return "Error"
+
+        tools = [
+            tool_factory(
+                name="calculate",
+                description="Calculate a mathematical expression",
+                properties={
+                    "expression": {
+                        "type": "string",
+                        "description": "The mathematical expression to evaluate",
+                    }
+                },
+                required=["expression"],
+                implementation=calculate,
+            )
+        ]
+
+        async_model = llm.get_async_model("apple")
+
+        print("\n[ASYNC STREAMING WITH TOOLS TEST]")
+
+        # Use async streaming
+        response_chunks = []
+        async for chunk in async_model.prompt(
+            "What is 25 times 4?", tools=tools, stream=True
+        ):
+            response_chunks.append(chunk)
+            print(chunk, end="", flush=True)
+
+        print()  # New line
+
+        full_response = "".join(response_chunks)
+        assert len(full_response) > 0, "Empty response from async streaming"
+
+        # Should contain the answer 100
+        if call_tracker.was_called():
+            print("  (Tool was called)")
+            assert "100" in full_response
+
+
 if __name__ == "__main__":
     # Allow running this file directly
     pytest.main([__file__, "-v", "-s"])

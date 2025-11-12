@@ -82,11 +82,77 @@ def mock_session_class(mock_availability):
 
 
 @pytest.fixture
-def mock_applefoundationmodels(monkeypatch, mock_session_class, mock_availability):
+def mock_async_session_class(mock_availability):
+    """Mock AsyncSession class from applefoundationmodels."""
+    from dataclasses import dataclass
+
+    # Create GenerationResponse for the mock
+    @dataclass
+    class MockGenerationResponse:
+        content: str
+        is_structured: bool = False
+        tool_calls: list = None
+        finish_reason: str = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return self.content
+
+    # Create StreamChunk for the mock
+    @dataclass
+    class MockStreamChunk:
+        content: str
+        finish_reason: str = None
+        index: int = 0
+
+    # Create a mock AsyncSession class
+    mock = Mock()
+    mock.check_availability = Mock(return_value=mock_availability.AVAILABLE)
+    mock.get_availability_reason = Mock(return_value=None)
+
+    # Create a mock async session instance (what AsyncSession() returns)
+    session_mock = AsyncMock()
+    # Return GenerationResponse object instead of string (0.2.0+ API)
+    session_mock.generate = AsyncMock(
+        return_value=MockGenerationResponse(content="Generated response")
+    )
+
+    # For streaming, return an async iterator of StreamChunk objects
+    async def mock_async_stream_gen():
+        """Mock async stream generator (0.2.0+ API)."""
+        for chunk_text in ["chunk1", "chunk2", "chunk3"]:
+            yield MockStreamChunk(content=chunk_text)
+
+    # Store the generator factory
+    def create_async_stream(*args, **kwargs):
+        return mock_async_stream_gen()
+
+    # For async, we need to handle both streaming and non-streaming differently
+    # We'll use the default return_value for non-streaming
+
+    # AsyncSession() constructor returns session_mock
+    mock.return_value = session_mock
+
+    return mock
+
+
+@pytest.fixture
+def mock_applefoundationmodels(
+    monkeypatch, mock_session_class, mock_async_session_class, mock_availability
+):
     """Mock the applefoundationmodels module."""
     # Create a mock module
     mock_module = MagicMock()
     mock_module.Session = mock_session_class
+    mock_module.AsyncSession = mock_async_session_class
     mock_module.Availability = mock_availability
 
     # Mock the types submodule for 0.2.0+ API
