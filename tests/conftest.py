@@ -16,49 +16,199 @@ def mock_availability():
 
 
 @pytest.fixture
-def mock_client_class(mock_availability):
-    """Mock Client class from applefoundationmodels."""
+def mock_session_class(mock_availability):
+    """Mock Session class from applefoundationmodels."""
+    from dataclasses import dataclass
+
+    # Create GenerationResponse for the mock
+    @dataclass
+    class MockGenerationResponse:
+        content: str
+        is_structured: bool = False
+        tool_calls: list = None
+        finish_reason: str = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return self.content
+
+    # Create StreamChunk for the mock
+    @dataclass
+    class MockStreamChunk:
+        content: str
+        finish_reason: str = None
+        index: int = 0
+
+    # Create a mock Session class
     mock = Mock()
     mock.check_availability = Mock(return_value=mock_availability.AVAILABLE)
     mock.get_availability_reason = Mock(return_value=None)
 
-    # Create a mock client instance
-    client_instance = Mock()
-
-    # Create a mock session
+    # Create a mock session instance (what Session() returns)
     session_mock = Mock()
-    session_mock.generate = Mock(return_value="Generated response")
+    # Return GenerationResponse object instead of string (0.2.0+ API)
+    session_mock.generate = Mock(
+        return_value=MockGenerationResponse(content="Generated response")
+    )
 
-    # Create async mock for streaming
-    async def mock_stream():
-        """Mock async stream generator."""
-        for chunk in ["chunk1", "chunk2", "chunk3"]:
-            yield chunk
+    # For streaming, return an iterator of StreamChunk objects
+    def mock_stream_gen():
+        """Mock sync stream generator (0.2.0+ API)."""
+        for chunk_text in ["chunk1", "chunk2", "chunk3"]:
+            yield MockStreamChunk(content=chunk_text)
 
-    session_mock.generate_stream = Mock(return_value=mock_stream())
+    # Store the generator factory
+    def create_stream():
+        return mock_stream_gen()
 
-    client_instance.create_session = Mock(return_value=session_mock)
-    mock.return_value = client_instance
+    def generate_side_effect(_prompt=None, *, stream=False, **_kwargs):
+        """Side effect for session.generate that handles streaming."""
+        if stream:
+            return create_stream()
+        return MockGenerationResponse(content="Generated response")
+
+    session_mock.generate.side_effect = generate_side_effect
+
+    # Session() constructor returns session_mock
+    mock.return_value = session_mock
 
     return mock
 
 
 @pytest.fixture
-def mock_applefoundationmodels(monkeypatch, mock_client_class, mock_availability):
+def mock_async_session_class(mock_availability):
+    """Mock AsyncSession class from applefoundationmodels."""
+    from dataclasses import dataclass
+
+    # Create GenerationResponse for the mock
+    @dataclass
+    class MockGenerationResponse:
+        content: str
+        is_structured: bool = False
+        tool_calls: list = None
+        finish_reason: str = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return self.content
+
+    # Create StreamChunk for the mock
+    @dataclass
+    class MockStreamChunk:
+        content: str
+        finish_reason: str = None
+        index: int = 0
+
+    # Create a mock AsyncSession class
+    mock = Mock()
+    mock.check_availability = Mock(return_value=mock_availability.AVAILABLE)
+    mock.get_availability_reason = Mock(return_value=None)
+
+    # Create a mock async session instance (what AsyncSession() returns)
+    session_mock = AsyncMock()
+    # Return GenerationResponse object instead of string (0.2.0+ API)
+    session_mock.generate = AsyncMock(
+        return_value=MockGenerationResponse(content="Generated response")
+    )
+
+    # For streaming, return an async iterator of StreamChunk objects
+    async def mock_async_stream_gen():
+        """Mock async stream generator (0.2.0+ API)."""
+        for chunk_text in ["chunk1", "chunk2", "chunk3"]:
+            yield MockStreamChunk(content=chunk_text)
+
+    # Store the generator factory
+    def create_async_stream():
+        return mock_async_stream_gen()
+
+    # For async, we need to handle both streaming and non-streaming differently
+    # We'll use the default return_value for non-streaming
+
+    # AsyncSession() constructor returns session_mock
+    mock.return_value = session_mock
+
+    return mock
+
+
+@pytest.fixture
+def mock_applefoundationmodels(
+    monkeypatch, mock_session_class, mock_async_session_class, mock_availability
+):
     """Mock the applefoundationmodels module."""
     # Create a mock module
     mock_module = MagicMock()
-    mock_module.Client = mock_client_class
+    mock_module.Session = mock_session_class
+    mock_module.AsyncSession = mock_async_session_class
     mock_module.Availability = mock_availability
+
+    # Mock the types submodule for 0.2.0+ API
+    mock_types = MagicMock()
+
+    # Create real ToolCall and Function classes for testing
+    from dataclasses import dataclass
+
+    @dataclass
+    class Function:
+        name: str
+        arguments: str
+
+    @dataclass
+    class ToolCall:
+        id: str
+        type: str
+        function: Function
+
+    @dataclass
+    class GenerationResponse:
+        content: str
+        is_structured: bool
+        tool_calls: list = None
+        finish_reason: str = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return self.content
+
+    mock_types.ToolCall = ToolCall
+    mock_types.Function = Function
+    mock_types.GenerationResponse = GenerationResponse
+    mock_module.types = mock_types
 
     # Add to sys.modules before importing llm_apple
     sys.modules["applefoundationmodels"] = mock_module
+    sys.modules["applefoundationmodels.types"] = mock_types
 
     yield mock_module
 
     # Cleanup
     if "applefoundationmodels" in sys.modules:
         del sys.modules["applefoundationmodels"]
+    if "applefoundationmodels.types" in sys.modules:
+        del sys.modules["applefoundationmodels.types"]
 
 
 @pytest.fixture
@@ -179,15 +329,40 @@ def create_mock_session(
     Factory function to create mock sessions with configurable behavior.
 
     Args:
-        generate_return: Return value for session.generate()
+        generate_return: Return value for session.generate() (will be wrapped in GenerationResponse)
         transcript: Session transcript (optional)
         include_tool_support: Whether to include tool-related mocks
 
     Returns:
         Mock session object
     """
+    from dataclasses import dataclass
+
+    # Create GenerationResponse for the mock (0.2.0+ API)
+    @dataclass
+    class MockGenerationResponse:
+        content: str
+        is_structured: bool = False
+        tool_calls: list = None
+        finish_reason: str = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return self.content
+
     session = Mock()
-    session.generate = Mock(return_value=generate_return)
+    # Wrap return value in GenerationResponse for 0.2.0+ API
+    session.generate = Mock(
+        return_value=MockGenerationResponse(content=generate_return)
+    )
     session.add_message = Mock()
 
     if include_tool_support:

@@ -1,7 +1,6 @@
 """Tests for tool calling functionality in llm-apple."""
 
 import pytest
-from unittest.mock import Mock, MagicMock
 import llm
 import llm_apple
 
@@ -55,57 +54,64 @@ def test_apple_model_supports_tools():
     assert model.supports_tools is True
 
 
-def test_register_tools_with_session(
-    mock_applefoundationmodels, weather_tool, session_factory
-):
-    """Test that tools are properly registered with a session."""
-    model = llm_apple.AppleModel()
-    session = session_factory(include_tool_support=True)
-
-    model._register_tools_with_session(session, [weather_tool])
-
-    # Verify tool was added to session
-    assert "get_weather" in session._tools
-    assert session._register_tools.called
-
-    # Verify tool metadata
-    registered_tool = session._tools["get_weather"]
-    assert registered_tool._tool_name == "get_weather"
-    assert registered_tool._tool_description == "Get weather for a location"
-    assert registered_tool._tool_parameters == weather_tool.input_schema
-
-
-def test_register_tools_with_empty_list(mock_applefoundationmodels, session_factory):
-    """Test that registering empty tool list is a no-op."""
-    model = llm_apple.AppleModel()
-    session = session_factory(include_tool_support=True)
-
-    model._register_tools_with_session(session, [])
-
-    # Should not modify session
-    assert len(session._tools) == 0
-
-
-def test_extract_tool_calls_from_transcript(mock_applefoundationmodels):
-    """Test extracting tool calls from session transcript."""
+def test_create_session_with_tools(mock_applefoundationmodels, weather_tool):
+    """Test that tools are properly passed to session creation."""
     model = llm_apple.AppleModel()
 
-    transcript = [
-        {"type": "prompt", "content": "Test"},
-        {
-            "type": "tool_calls",
-            "tool_calls": [
-                {
-                    "name": "get_weather",
-                    "id": "call_1",
-                    "arguments": '{"location": "Paris"}',
-                },
-                {"name": "get_time", "id": "call_2", "arguments": "{}"},
-            ],
-        },
+    # Create session with tools (in 0.2.0, tools are passed at creation)
+    session = model._create_session(instructions="Test", tools=[weather_tool])
+
+    # Verify session is the mocked Session instance
+    assert session is mock_applefoundationmodels.Session.return_value
+
+    # Verify Session() was called with tools
+    assert mock_applefoundationmodels.Session.called
+    call_kwargs = mock_applefoundationmodels.Session.call_args[1]
+    assert "tools" in call_kwargs
+    assert len(call_kwargs["tools"]) == 1
+    # The tool function should be the implementation
+    assert call_kwargs["tools"][0] == weather_tool.implementation
+
+
+def test_create_session_without_tools(mock_applefoundationmodels):
+    """Test that session creation works without tools."""
+    model = llm_apple.AppleModel()
+
+    # Create session without tools
+    session = model._create_session(instructions="Test", tools=None)
+
+    # Verify session is the mocked Session instance
+    assert session is mock_applefoundationmodels.Session.return_value
+
+    # Verify Session() was called without tools
+    assert mock_applefoundationmodels.Session.called
+    call_kwargs = mock_applefoundationmodels.Session.call_args[1]
+    assert "tools" not in call_kwargs or call_kwargs.get("tools") is None
+
+
+def test_extract_tool_calls_from_response(mock_applefoundationmodels):
+    """Test extracting tool calls from GenerationResponse."""
+    from unittest.mock import Mock
+    from applefoundationmodels.types import ToolCall, Function
+
+    model = llm_apple.AppleModel()
+
+    # Create a mock response with tool calls (0.2.0+ API)
+    response = Mock()
+    response.tool_calls = [
+        ToolCall(
+            id="call_1",
+            type="function",
+            function=Function(name="get_weather", arguments='{"location": "Paris"}'),
+        ),
+        ToolCall(
+            id="call_2",
+            type="function",
+            function=Function(name="get_time", arguments="{}"),
+        ),
     ]
 
-    tool_calls = model._extract_tool_calls_from_transcript(transcript)
+    tool_calls = model._extract_tool_calls_from_response(response)
 
     assert len(tool_calls) == 2
     assert tool_calls[0].name == "get_weather"
@@ -117,23 +123,23 @@ def test_extract_tool_calls_from_transcript(mock_applefoundationmodels):
 
 
 def test_extract_tool_calls_with_no_tool_calls(mock_applefoundationmodels):
-    """Test extracting tool calls from transcript with no tool calls."""
+    """Test extracting tool calls from response with no tool calls."""
+    from unittest.mock import Mock
+
     model = llm_apple.AppleModel()
 
-    transcript = [
-        {"type": "prompt", "content": "Test"},
-        {"type": "response", "content": "Response"},
-    ]
+    # Create a mock response without tool calls
+    response = Mock()
+    response.tool_calls = None
 
-    tool_calls = model._extract_tool_calls_from_transcript(transcript)
+    tool_calls = model._extract_tool_calls_from_response(response)
 
     assert len(tool_calls) == 0
 
 
-def test_add_tool_results_to_session(mock_applefoundationmodels, session_factory):
-    """Test adding tool results to session."""
+def test_format_tool_results_as_prompt(mock_applefoundationmodels):
+    """Test formatting tool results as prompt text."""
     model = llm_apple.AppleModel()
-    session = session_factory()
 
     tool_results = [
         llm.ToolResult(
@@ -144,36 +150,46 @@ def test_add_tool_results_to_session(mock_applefoundationmodels, session_factory
         llm.ToolResult(name="get_time", output="2:30 PM", tool_call_id="call_2"),
     ]
 
-    model._add_tool_results_to_session(session, tool_results)
+    result = model._format_tool_results_as_prompt(tool_results)
 
-    # Verify add_message was called for each result
-    assert session.add_message.call_count == 2
-    session.add_message.assert_any_call(
-        "user", "Tool get_weather returned: Weather in Paris: sunny, 72°F"
-    )
-    session.add_message.assert_any_call("user", "Tool get_time returned: 2:30 PM")
+    # Verify the formatted string contains both results
+    assert "get_weather() returned: Weather in Paris: sunny, 72°F" in result
+    assert "get_time() returned: 2:30 PM" in result
 
 
-def test_add_tool_results_with_empty_list(mock_applefoundationmodels, session_factory):
-    """Test adding empty tool results list is a no-op."""
+def test_format_tool_results_with_empty_list(mock_applefoundationmodels):
+    """Test formatting empty tool results list returns empty string."""
     model = llm_apple.AppleModel()
-    session = session_factory()
 
-    model._add_tool_results_to_session(session, [])
+    result = model._format_tool_results_as_prompt([])
 
-    assert session.add_message.call_count == 0
+    assert result == ""
 
 
-def test_execute_with_tools(
-    mock_applefoundationmodels, weather_tool, session_with_tool_transcript
-):
+def test_execute_with_tools(mock_applefoundationmodels, weather_tool):
     """Test execute method with tools."""
+    from unittest.mock import Mock
+    from applefoundationmodels.types import GenerationResponse, ToolCall, Function
+
     model = llm_apple.AppleModel()
 
-    # Mock the session creation to return our mock session
+    # Create a mock session with generate method that returns a response with tool calls
+    mock_session = Mock()
+    mock_response = GenerationResponse(
+        content="The weather is sunny", is_structured=False
+    )
+    mock_response.tool_calls = [
+        ToolCall(
+            id="call_123",
+            type="function",
+            function=Function(name="get_weather", arguments='{"location": "Paris"}'),
+        )
+    ]
+    mock_session.generate.return_value = mock_response
+
+    # Mock the session creation
     model._sessions = {}
-    client = model._get_client()
-    client.create_session = Mock(return_value=session_with_tool_transcript)
+    mock_applefoundationmodels.Session.return_value = mock_session
 
     # Create prompt with tools
     prompt = Mock()
@@ -190,9 +206,6 @@ def test_execute_with_tools(
 
     result = model.execute(prompt, stream=False, response=response, conversation=None)
 
-    # Verify tool was registered
-    assert "get_weather" in session_with_tool_transcript._tools
-
     # Verify tool calls were added to response
     assert response.add_tool_call.called
 
@@ -200,18 +213,21 @@ def test_execute_with_tools(
     assert result == "The weather is sunny"
 
 
-def test_execute_with_tool_results(mock_applefoundationmodels, session_factory):
+def test_execute_with_tool_results(mock_applefoundationmodels):
     """Test execute method with tool results."""
+    from unittest.mock import Mock
+    from applefoundationmodels.types import GenerationResponse
+
     model = llm_apple.AppleModel()
 
-    session = session_factory(
-        generate_return="Based on the weather, I recommend...",
-        transcript=[],
-        include_tool_support=True,
+    # Create a mock session with generate method
+    mock_session = Mock()
+    mock_response = GenerationResponse(
+        content="Based on the weather, I recommend...", is_structured=False
     )
+    mock_session.generate.return_value = mock_response
 
-    client = model._get_client()
-    client.create_session = Mock(return_value=session)
+    mock_applefoundationmodels.Session.return_value = mock_session
 
     # Create prompt with tool results
     prompt = Mock()
@@ -234,30 +250,32 @@ def test_execute_with_tool_results(mock_applefoundationmodels, session_factory):
 
     result = model.execute(prompt, stream=False, response=response, conversation=None)
 
-    # Verify tool result was added to session
-    assert session.add_message.called
-    session.add_message.assert_called_with(
-        "user", "Tool get_weather returned: Weather in Paris: sunny, 72°F"
-    )
+    # Verify generate was called with tool results in the prompt
+    assert mock_session.generate.called
+    call_args = mock_session.generate.call_args[0]
+    prompt_text = call_args[0]
+    # Tool results should be formatted into the prompt
+    assert "get_weather() returned: Weather in Paris: sunny, 72°F" in prompt_text
 
     # Verify result was returned
     assert result == "Based on the weather, I recommend..."
 
 
-def test_execute_without_prompt_text_but_with_tool_results(
-    mock_applefoundationmodels, session_factory
-):
+def test_execute_without_prompt_text_but_with_tool_results(mock_applefoundationmodels):
     """Test execute method when prompt.prompt is None but tool_results are present."""
+    from unittest.mock import Mock
+    from applefoundationmodels.types import GenerationResponse
+
     model = llm_apple.AppleModel()
 
-    session = session_factory(
-        generate_return="Continuation response",
-        transcript=[],
-        include_tool_support=True,
+    # Create a mock session with generate method
+    mock_session = Mock()
+    mock_response = GenerationResponse(
+        content="Continuation response", is_structured=False
     )
+    mock_session.generate.return_value = mock_response
 
-    client = model._get_client()
-    client.create_session = Mock(return_value=session)
+    mock_applefoundationmodels.Session.return_value = mock_session
 
     # Create prompt without prompt text but with tool results
     prompt = Mock()
@@ -281,18 +299,22 @@ def test_execute_without_prompt_text_but_with_tool_results(
     result = model.execute(prompt, stream=False, response=response, conversation=None)
 
     # Verify a continuation prompt was created
-    session.generate.assert_called_once()
-    call_args = session.generate.call_args
-    assert "Please continue based on the tool results above" in call_args[0][0]
+    mock_session.generate.assert_called_once()
+    call_args = mock_session.generate.call_args[0]
+    prompt_text = call_args[0]
+    assert "get_weather() returned: Weather in Paris: sunny, 72°F" in prompt_text
+    assert "Please continue based on these results" in prompt_text
 
     # Verify result was returned
     assert result == "Continuation response"
 
 
-def test_tool_wrapper_closure(
-    mock_applefoundationmodels, tool_factory, session_factory
+def test_create_session_passes_tool_implementations(
+    mock_applefoundationmodels, tool_factory
 ):
-    """Test that tool wrappers have proper closure and don't share state."""
+    """Test that tool implementations are passed correctly to create_session."""
+    from unittest.mock import Mock
+
     model = llm_apple.AppleModel()
 
     # Create multiple tools
@@ -317,17 +339,13 @@ def test_tool_wrapper_closure(
         ),
     ]
 
-    session = session_factory(include_tool_support=True)
+    # Create session with tools
+    model._create_session(instructions="Test", tools=tools)
 
-    model._register_tools_with_session(session, tools)
-
-    # Verify both tools were registered
-    assert "tool1" in session._tools
-    assert "tool2" in session._tools
-
-    # Verify they call the correct implementations
-    result1 = session._tools["tool1"](x="test1")
-    result2 = session._tools["tool2"](y="test2")
-
-    assert result1 == "tool1: test1"
-    assert result2 == "tool2: test2"
+    # Verify Session() was called with both tool implementations
+    assert mock_applefoundationmodels.Session.called
+    call_kwargs = mock_applefoundationmodels.Session.call_args[1]
+    assert "tools" in call_kwargs
+    assert len(call_kwargs["tools"]) == 2
+    assert call_kwargs["tools"][0] == tool1_impl
+    assert call_kwargs["tools"][1] == tool2_impl

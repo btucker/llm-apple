@@ -12,17 +12,18 @@ def test_register_models():
 
 
 def test_register_models_calls_register():
-    """Test that register_models calls the register function with AppleModel."""
+    """Test that register_models calls the register function with both sync and async models."""
     mock_register = Mock()
     llm_apple.register_models(mock_register)
 
     # Verify register was called once
     assert mock_register.call_count == 1
 
-    # Verify it was called with an AppleModel instance
+    # Verify it was called with both AppleModel and AppleAsyncModel instances
     call_args = mock_register.call_args[0]
-    assert len(call_args) == 1
+    assert len(call_args) == 2
     assert isinstance(call_args[0], llm_apple.AppleModel)
+    assert isinstance(call_args[1], llm_apple.AppleAsyncModel)
 
 
 def test_apple_model_has_correct_attributes():
