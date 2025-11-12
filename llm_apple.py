@@ -42,7 +42,6 @@ class AppleModel(llm.Model):
 
     def __init__(self):
         """Initialize the Apple model."""
-        self._client = None
         self._sessions = {}
         self._availability_checked = False
 
@@ -72,124 +71,109 @@ class AppleModel(llm.Model):
         if self._availability_checked:
             return
 
-        from applefoundationmodels import Client, Availability
+        from applefoundationmodels import Session, Availability
 
-        status = Client.check_availability()
+        status = Session.check_availability()
         if status != Availability.AVAILABLE:
-            reason = Client.get_availability_reason()
+            reason = Session.get_availability_reason()
             raise RuntimeError(
                 f"Apple Intelligence not available: {reason or 'Unknown reason'}"
             )
 
         self._availability_checked = True
 
-    def _get_client(self):
-        """Get or create the client instance."""
-        if self._client is None:
-            from applefoundationmodels import Client
+    def _create_session(
+        self, instructions: Optional[str], tools: Optional[list] = None
+    ):
+        """Create a new session with the given instructions and tools."""
+        from applefoundationmodels import Session
 
-            self._check_availability()
-            self._client = Client()
-        return self._client
+        self._check_availability()
 
-    def _create_session(self, instructions: Optional[str]):
-        """Create a new session with the given instructions."""
-        client = self._get_client()
-        return client.create_session(instructions=instructions)
+        # Convert llm.Tool objects to Python functions for apple-foundation-models
+        tool_functions = []
+        if tools:
+            for tool in tools:
+                # Get the implementation function
+                func = tool.implementation
 
-    def _get_session(self, conversation_id: Optional[str], instructions: Optional[str]):
+                # Set docstring and type hints to match the tool schema
+                if not func.__doc__:
+                    func.__doc__ = tool.description or ""
+
+                tool_functions.append(func)
+
+        # Create session with tools if provided
+        if tool_functions:
+            return Session(instructions=instructions, tools=tool_functions)
+        else:
+            return Session(instructions=instructions)
+
+    def _get_session(
+        self,
+        conversation_id: Optional[str],
+        instructions: Optional[str],
+        tools: Optional[list] = None,
+    ):
         """Get or create a session for the conversation."""
         # If no conversation, create a new session each time
         if conversation_id is None:
-            return self._create_session(instructions)
+            return self._create_session(instructions, tools)
 
-        # Reuse existing session for conversation
-        if conversation_id not in self._sessions:
-            self._sessions[conversation_id] = self._create_session(instructions)
+        # Reuse existing session for conversation (without tools on first create)
+        # Note: If tools are provided, we need to create a new session since
+        # tools are registered at session creation time in 0.2.0
+        if conversation_id not in self._sessions or tools:
+            self._sessions[conversation_id] = self._create_session(instructions, tools)
 
         return self._sessions[conversation_id]
 
-    def _register_tools_with_session(self, session, tools: list):
+    def _extract_tool_calls_from_response(self, response: "GenerationResponse") -> list:
         """
-        Register tools with the Apple Foundation Models session.
+        Extract tool calls from GenerationResponse.
 
         Args:
-            session: The session object
-            tools: List of llm.Tool objects
-        """
-        if not tools:
-            return
-
-        def create_tool_wrapper(implementation):
-            """Factory function to create tool wrapper with proper closure."""
-
-            def wrapper(*args, **kwargs):
-                return implementation(*args, **kwargs)
-
-            return wrapper
-
-        # Ensure _tools dict exists
-        if not hasattr(session, "_tools"):
-            session._tools = {}
-
-        # Add all tools to the session
-        for tool in tools:
-            # Create a wrapper function with proper closure
-            tool_func = create_tool_wrapper(tool.implementation)
-
-            # Set the tool metadata directly on the function
-            tool_func._tool_name = tool.name
-            tool_func._tool_description = tool.description or ""
-            tool_func._tool_parameters = tool.input_schema
-
-            # Add tool to session's tools dict
-            session._tools[tool.name] = tool_func
-
-        # Register all tools at once with the FFI layer
-        if hasattr(session, "_register_tools") and len(session._tools) > 0:
-            session._register_tools()
-
-    def _extract_tool_calls_from_transcript(self, transcript: list) -> list:
-        """
-        Extract tool calls from session transcript.
-
-        Args:
-            transcript: Session transcript from Apple Foundation Models
+            response: GenerationResponse from Apple Foundation Models 0.2.0+
 
         Returns:
             List of llm.ToolCall objects
         """
         tool_calls = []
 
-        for entry in transcript:
-            if entry.get("type") == "tool_calls":
-                for call in entry.get("tool_calls", []):
-                    tool_calls.append(
-                        llm.ToolCall(
-                            name=call.get("name", ""),
-                            arguments=json.loads(call.get("arguments", "{}")),
-                            tool_call_id=call.get("id"),
-                        )
+        if hasattr(response, "tool_calls") and response.tool_calls:
+            for call in response.tool_calls:
+                tool_calls.append(
+                    llm.ToolCall(
+                        name=call.function.name,
+                        arguments=json.loads(call.function.arguments),
+                        tool_call_id=call.id,
                     )
+                )
 
         return tool_calls
 
-    def _add_tool_results_to_session(self, session, tool_results: list):
+    def _format_tool_results_as_prompt(self, tool_results: list) -> str:
         """
-        Add tool results to the session history.
+        Format tool results as a prompt continuation.
+
+        In 0.2.0, apple-foundation-models handles tool execution automatically.
+        When llm sends us tool_results (from its own execution), we format them
+        as part of the next prompt.
 
         Args:
-            session: The session object
             tool_results: List of llm.ToolResult objects
+
+        Returns:
+            Formatted string with tool results
         """
         if not tool_results:
-            return
+            return ""
 
-        # Add tool results as messages to the session
+        result_parts = []
         for result in tool_results:
-            # Add the tool result as a user message containing the result
-            content = f"Tool {result.name} returned: {result.output}"
-            session.add_message("user", content)
+            result_parts.append(f"{result.name}() returned: {result.output}")
+
+        return "\n".join(result_parts)
 
     def execute(self, prompt, stream, response, conversation):
         """Execute a prompt against Apple Foundation Models."""
@@ -207,91 +191,55 @@ class AppleModel(llm.Model):
         # Get conversation ID if available
         conversation_id = conversation.id if conversation else None
 
-        # Check if we have tools - if so, we need a fresh session with tools
+        # Check if we have tools
         has_tools = self._is_valid_list_attribute(prompt, "tools")
+        tools = prompt.tools if has_tools else None
 
-        if has_tools:
-            # Create a new session specifically for tool calling
-            # (can't add tools to existing session)
-            session = self._create_session(system_prompt)
-            self._register_tools_with_session(session, prompt.tools)
-
-            # Store the tool-enabled session for this conversation
-            # so subsequent turns reuse it instead of reverting to old session
-            if conversation_id is not None:
-                self._sessions[conversation_id] = session
-        else:
-            # Get or create session (may reuse for conversations)
-            session = self._get_session(conversation_id, system_prompt)
-
-        # Add tool results to session if provided
-        has_tool_results = self._is_valid_list_attribute(prompt, "tool_results")
-        if has_tool_results:
-            self._add_tool_results_to_session(session, prompt.tool_results)
+        # Get or create session with tools
+        # In 0.2.0, tools are registered at session creation time
+        session = self._get_session(conversation_id, system_prompt, tools)
 
         # Get the actual prompt text (may be None for tool-only prompts)
         prompt_text = getattr(prompt, "prompt", None) or ""
 
-        # If we have no prompt text but have tool results, create a continuation prompt
-        if not prompt_text and has_tool_results:
-            prompt_text = "Please continue based on the tool results above."
+        # Handle tool results if provided
+        has_tool_results = self._is_valid_list_attribute(prompt, "tool_results")
+        if has_tool_results:
+            # Format tool results as part of the prompt
+            tool_results_text = self._format_tool_results_as_prompt(prompt.tool_results)
+            if tool_results_text:
+                if prompt_text:
+                    prompt_text = f"{tool_results_text}\n\n{prompt_text}"
+                else:
+                    prompt_text = f"{tool_results_text}\n\nPlease continue based on these results."
 
         # Generate response
         if stream:
+            # For streaming, we can't extract tool calls from the chunks
+            # Tool calls are only available in the non-streaming response
             result = self._stream_response(
                 session, prompt_text, temperature, max_tokens
             )
         else:
-            result = self._generate_response(
-                session, prompt_text, temperature, max_tokens
+            # Get the full response object to extract tool calls
+            gen_response = session.generate(
+                prompt_text, temperature=temperature, max_tokens=max_tokens
             )
 
-        # Extract tool calls from transcript and add to response
-        transcript = getattr(session, "transcript", None)
-        if transcript and isinstance(transcript, (list, tuple)):
-            tool_calls = self._extract_tool_calls_from_transcript(transcript)
+            # Extract tool calls from response.tool_calls (0.2.0+ API)
+            tool_calls = self._extract_tool_calls_from_response(gen_response)
             for tool_call in tool_calls:
                 response.add_tool_call(tool_call)
 
+            # Return the text content
+            result = gen_response.text
+
         return result
-
-    def _get_or_create_event_loop(self):
-        """Get existing event loop or create a new one."""
-        import asyncio
-
-        try:
-            return asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            return loop
 
     def _stream_response(self, session, prompt_text, temperature, max_tokens):
         """Stream response tokens."""
-        import asyncio
-
-        loop = self._get_or_create_event_loop()
-
-        # Run the async generator in the event loop
-        async def _async_stream():
-            async for chunk in session.generate_stream(
-                prompt_text, temperature=temperature, max_tokens=max_tokens
-            ):
-                yield chunk
-
-        # Convert async generator to sync generator
-        async_gen = _async_stream()
-
-        while True:
-            try:
-                chunk = loop.run_until_complete(async_gen.__anext__())
-                yield chunk
-            except StopAsyncIteration:
-                break
-
-    def _generate_response(self, session, prompt_text, temperature, max_tokens):
-        """Generate a complete response."""
-        response = session.generate(
-            prompt_text, temperature=temperature, max_tokens=max_tokens
-        )
-        return response
+        # In 0.2.0, generate() with stream=True returns a sync iterator
+        for chunk in session.generate(
+            prompt_text, stream=True, temperature=temperature, max_tokens=max_tokens
+        ):
+            yield chunk.content

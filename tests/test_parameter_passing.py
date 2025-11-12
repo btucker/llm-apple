@@ -25,14 +25,11 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
         prompt=prompt, stream=False, response=response, conversation=conversation
     )
 
-    # Get the session that was created
-    client = model._get_client()
-
-    # Verify create_session was called with system prompt as instructions
-    client.create_session.assert_called_with(instructions="You are a helpful assistant")
+    # Verify Session was called with system prompt as instructions
+    mock_applefoundationmodels.Session.assert_called_with(instructions="You are a helpful assistant")
 
     # Get the session instance
-    session = client.create_session.return_value
+    session = mock_applefoundationmodels.Session.return_value
 
     # Verify session.generate was called with correct parameters
     session.generate.assert_called_once_with(
@@ -41,7 +38,7 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
 
 
 def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
-    """Verify all parameters flow correctly from prompt to session.generate_stream()."""
+    """Verify all parameters flow correctly from prompt to session.generate(stream=True)."""
     model = llm_apple.AppleModel()
 
     # Create prompt with all custom options
@@ -63,18 +60,15 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
     # Consume the generator
     chunks = list(result)
 
-    # Get the session that was created
-    client = model._get_client()
-
-    # Verify create_session was called with system prompt as instructions
-    client.create_session.assert_called_with(instructions="You are creative")
+    # Verify Session was called with system prompt as instructions
+    mock_applefoundationmodels.Session.assert_called_with(instructions="You are creative")
 
     # Get the session instance
-    session = client.create_session.return_value
+    session = mock_applefoundationmodels.Session.return_value
 
-    # Verify session.generate_stream was called with correct parameters
-    session.generate_stream.assert_called_once_with(
-        "Streaming test", temperature=1.5, max_tokens=2048
+    # Verify session.generate was called with stream=True and correct parameters (0.2.0+ API)
+    session.generate.assert_called_once_with(
+        "Streaming test", stream=True, temperature=1.5, max_tokens=2048
     )
 
 
@@ -96,8 +90,7 @@ def test_default_values_when_options_none(mock_applefoundationmodels):
     model.execute(prompt=prompt, stream=False, response=response, conversation=None)
 
     # Get session
-    client = model._get_client()
-    session = client.create_session.return_value
+    session = mock_applefoundationmodels.Session.return_value
 
     # Verify defaults were used (1.0 for temperature, 1024 for max_tokens)
     session.generate.assert_called_once_with("Test", temperature=1.0, max_tokens=1024)
@@ -114,8 +107,7 @@ def test_edge_case_temperatures(mock_applefoundationmodels):
 
     model.execute(prompt=prompt, stream=False, response=Mock(), conversation=None)
 
-    client = model._get_client()
-    session = client.create_session.return_value
+    session = mock_applefoundationmodels.Session.return_value
 
     # Should pass through 0.0, not the default
     calls = [c for c in session.generate.call_args_list]
@@ -129,8 +121,7 @@ def test_edge_case_temperatures(mock_applefoundationmodels):
 
     model2.execute(prompt=prompt2, stream=False, response=Mock(), conversation=None)
 
-    client2 = model2._get_client()
-    session2 = client2.create_session.return_value
+    session2 = mock_applefoundationmodels.Session.return_value
 
     session2.generate.assert_called_with("Test2", temperature=2.0, max_tokens=100)
 

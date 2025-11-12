@@ -9,36 +9,10 @@ def test_apple_model_initialization():
     """Test that AppleModel initializes with correct state."""
     model = llm_apple.AppleModel()
 
-    assert model._client is None
     assert model._sessions == {}
     assert model._availability_checked is False
     assert model.model_id == "apple"
     assert model.can_stream is True
-
-
-def test_get_client_creates_client_once(mock_applefoundationmodels):
-    """Test that _get_client creates and reuses a single client instance."""
-    model = llm_apple.AppleModel()
-
-    # First call should create client
-    client1 = model._get_client()
-    assert client1 is not None
-    assert model._client is not None
-
-    # Second call should return same client
-    client2 = model._get_client()
-    assert client2 is client1
-    assert mock_applefoundationmodels.Client.call_count == 1
-
-
-def test_get_client_checks_availability(mock_applefoundationmodels):
-    """Test that _get_client checks availability before creating client."""
-    model = llm_apple.AppleModel()
-
-    model._get_client()
-
-    # Verify availability was checked
-    assert mock_applefoundationmodels.Client.check_availability.called
 
 
 def test_get_session_without_conversation(mock_applefoundationmodels):
@@ -52,9 +26,8 @@ def test_get_session_without_conversation(mock_applefoundationmodels):
     # Should create new session each time
     assert session1 is not None
     assert session2 is not None
-    # Client should have create_session called twice
-    client = model._get_client()
-    assert client.create_session.call_count >= 2
+    # Session() should have been called twice
+    assert mock_applefoundationmodels.Session.call_count >= 2
 
 
 def test_get_session_with_conversation_reuses_session(mock_applefoundationmodels):
@@ -70,10 +43,8 @@ def test_get_session_with_conversation_reuses_session(mock_applefoundationmodels
     assert session1 is session2
     assert conversation_id in model._sessions
 
-    # Client should create session only once for this conversation
-    client = model._get_client()
-    # Note: create_session is called once per conversation
-    assert client.create_session.call_count >= 1
+    # Session() should be called only once for this conversation
+    assert mock_applefoundationmodels.Session.call_count >= 1
 
 
 def test_get_session_with_different_conversations(mock_applefoundationmodels):
@@ -90,15 +61,14 @@ def test_get_session_with_different_conversations(mock_applefoundationmodels):
 
 
 def test_get_session_with_instructions(mock_applefoundationmodels):
-    """Test that _get_session passes instructions to create_session."""
+    """Test that _get_session passes instructions to Session constructor."""
     model = llm_apple.AppleModel()
     instructions = "You are a helpful assistant"
 
     session = model._get_session(None, instructions)
 
-    # Verify instructions were passed
-    client = model._get_client()
-    client.create_session.assert_called_with(instructions=instructions)
+    # Verify instructions were passed to Session()
+    mock_applefoundationmodels.Session.assert_called_with(instructions=instructions)
 
 
 def test_check_availability_only_once(mock_applefoundationmodels):
@@ -111,5 +81,5 @@ def test_check_availability_only_once(mock_applefoundationmodels):
     model._check_availability()
 
     # Should only check once
-    assert mock_applefoundationmodels.Client.check_availability.call_count == 1
+    assert mock_applefoundationmodels.Session.check_availability.call_count == 1
     assert model._availability_checked is True

@@ -5,17 +5,18 @@ These tests run against the actual Apple Foundation Models API when available.
 They will be skipped if Apple Intelligence is not available on the system.
 """
 
+import os
+
 import pytest
 import llm
 
 
-# Check if Apple Intelligence is available
 def is_apple_intelligence_available():
     """Check if Apple Intelligence is available on this system."""
     try:
-        from applefoundationmodels import Client, Availability
+        from applefoundationmodels import Session, Availability
 
-        status = Client.check_availability()
+        status = Session.check_availability()
         return status == Availability.AVAILABLE
     except (ImportError, Exception):
         return False
@@ -167,9 +168,10 @@ class TestToolCallingIntegration:
             print("  (Tool was called)")
             # Verify tool was called with correct arguments
             call = call_tracker.get_call(0)
+            # Since multiplication is commutative, allow either order
             assert (
-                call["x"] == 15 and call["y"] == 7
-            ), f"Expected x=15, y=7 but got {call}"
+                (call["x"] == 15 and call["y"] == 7) or (call["x"] == 7 and call["y"] == 15)
+            ), f"Expected x=15, y=7 or x=7, y=15 but got {call}"
             # Model may use "multiply", "multiplication", "times", or "*"
             op = call["operation"].lower()
             assert (
