@@ -1,0 +1,3 @@
+- should we add support for async? how does llm support this?
+- add some more test cases to test that the async model works fully.
+  specifically with streaming or with tools
