@@ -1,0 +1,2 @@
+- In tests/test_async_model.py around lines 393 to 422, the local variable
+  session
