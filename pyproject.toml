@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [{ name = "Ben Tucker" }]
 license = "MIT"
 requires-python = ">=3.9"
-dependencies = ["llm>=0.15", "apple-foundation-models>=0.1.6"]
+dependencies = ["llm>=0.15", "apple-foundation-models>=0.2.0"]
 
 [project.optional-dependencies]
 test = ["pytest>=7.0", "pytest-asyncio>=0.21.0", "pytest-cov>=4.0"]
