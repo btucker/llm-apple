@@ -169,8 +169,8 @@ class TestToolCallingIntegration:
             # Verify tool was called with correct arguments
             call = call_tracker.get_call(0)
             # Since multiplication is commutative, allow either order
-            assert (
-                (call["x"] == 15 and call["y"] == 7) or (call["x"] == 7 and call["y"] == 15)
+            assert (call["x"] == 15 and call["y"] == 7) or (
+                call["x"] == 7 and call["y"] == 15
             ), f"Expected x=15, y=7 or x=7, y=15 but got {call}"
             # Model may use "multiply", "multiplication", "times", or "*"
             op = call["operation"].lower()

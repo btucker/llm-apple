@@ -26,7 +26,9 @@ def test_all_parameters_passed_through_non_streaming(mock_applefoundationmodels)
     )
 
     # Verify Session was called with system prompt as instructions
-    mock_applefoundationmodels.Session.assert_called_with(instructions="You are a helpful assistant")
+    mock_applefoundationmodels.Session.assert_called_with(
+        instructions="You are a helpful assistant"
+    )
 
     # Get the session instance
     session = mock_applefoundationmodels.Session.return_value
@@ -61,7 +63,9 @@ def test_all_parameters_passed_through_streaming(mock_applefoundationmodels):
     chunks = list(result)
 
     # Verify Session was called with system prompt as instructions
-    mock_applefoundationmodels.Session.assert_called_with(instructions="You are creative")
+    mock_applefoundationmodels.Session.assert_called_with(
+        instructions="You are creative"
+    )
 
     # Get the session instance
     session = mock_applefoundationmodels.Session.return_value
