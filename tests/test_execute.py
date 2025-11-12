@@ -146,7 +146,7 @@ def test_stream_response_yields_chunks(mock_applefoundationmodels):
     # Create a mock session with generate that returns chunks when stream=True
     session = Mock()
 
-    def mock_stream_gen(*args, **kwargs):
+    def mock_stream_gen():
         for chunk_text in ["a", "b", "c"]:
             yield MockStreamChunk(content=chunk_text)
 

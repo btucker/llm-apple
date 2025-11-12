@@ -5,8 +5,6 @@ These tests run against the actual Apple Foundation Models API when available.
 They will be skipped if Apple Intelligence is not available on the system.
 """
 
-import os
-
 import pytest
 import llm
 
@@ -286,7 +284,8 @@ class TestToolCallingVerbose:
             call_tracker.track(query=query, limit=limit)
             print(f"\n[TOOL CALLED] search_database(query='{query}', limit={limit})")
             results = [
-                f"Result {i+1}: Information about {query}" for i in range(min(limit, 3))
+                f"Result {i + 1}: Information about {query}"
+                for i in range(min(limit, 3))
             ]
             return f"Found {len(results)} results: " + "; ".join(results)
 

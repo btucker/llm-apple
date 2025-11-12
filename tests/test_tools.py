@@ -1,7 +1,6 @@
 """Tests for tool calling functionality in llm-apple."""
 
 import pytest
-from unittest.mock import Mock, MagicMock
 import llm
 import llm_apple
 
@@ -62,6 +61,9 @@ def test_create_session_with_tools(mock_applefoundationmodels, weather_tool):
     # Create session with tools (in 0.2.0, tools are passed at creation)
     session = model._create_session(instructions="Test", tools=[weather_tool])
 
+    # Verify session is the mocked Session instance
+    assert session is mock_applefoundationmodels.Session.return_value
+
     # Verify Session() was called with tools
     assert mock_applefoundationmodels.Session.called
     call_kwargs = mock_applefoundationmodels.Session.call_args[1]
@@ -77,6 +79,9 @@ def test_create_session_without_tools(mock_applefoundationmodels):
 
     # Create session without tools
     session = model._create_session(instructions="Test", tools=None)
+
+    # Verify session is the mocked Session instance
+    assert session is mock_applefoundationmodels.Session.return_value
 
     # Verify Session() was called without tools
     assert mock_applefoundationmodels.Session.called

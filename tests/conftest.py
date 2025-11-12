@@ -66,14 +66,16 @@ def mock_session_class(mock_availability):
             yield MockStreamChunk(content=chunk_text)
 
     # Store the generator factory
-    def create_stream(*args, **kwargs):
+    def create_stream():
         return mock_stream_gen()
 
-    session_mock.generate.side_effect = lambda *args, **kwargs: (
-        create_stream()
-        if kwargs.get("stream")
-        else MockGenerationResponse(content="Generated response")
-    )
+    def generate_side_effect(_prompt=None, *, stream=False, **_kwargs):
+        """Side effect for session.generate that handles streaming."""
+        if stream:
+            return create_stream()
+        return MockGenerationResponse(content="Generated response")
+
+    session_mock.generate.side_effect = generate_side_effect
 
     # Session() constructor returns session_mock
     mock.return_value = session_mock
@@ -132,7 +134,7 @@ def mock_async_session_class(mock_availability):
             yield MockStreamChunk(content=chunk_text)
 
     # Store the generator factory
-    def create_async_stream(*args, **kwargs):
+    def create_async_stream():
         return mock_async_stream_gen()
 
     # For async, we need to handle both streaming and non-streaming differently
