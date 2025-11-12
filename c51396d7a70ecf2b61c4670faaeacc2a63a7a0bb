@@ -1,0 +1,2 @@
+- In tests/conftest.py around lines 69 to 76, the side-effect helpers declare
+- In tests/test_tools.py around lines 63 to 85, both tests assign the result of
