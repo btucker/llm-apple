@@ -1,0 +1,5 @@
+- review ~/apple-foundation-models-py/README.md and update this module to work
+  with the new interface it provides
+- it shouldn't be skipping the integration tests on this machine. apple
+  intelligence is available
+- do we need @tests/_stubs.py ?
