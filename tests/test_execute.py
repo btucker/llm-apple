@@ -103,11 +103,10 @@ def test_execute_with_instructions(mock_applefoundationmodels, mock_response):
         prompt=prompt, stream=False, response=mock_response, conversation=None
     )
 
-    # Verify session was created with system prompt
-    client = model._get_client()
-    # Should have called create_session with instructions
+    # Verify Session was created with system prompt
+    # Should have called Session() with instructions
     called_with_instructions = False
-    for call in client.create_session.call_args_list:
+    for call in mock_applefoundationmodels.Session.call_args_list:
         if call[1].get("instructions") == "You are helpful":
             called_with_instructions = True
             break
@@ -134,34 +133,24 @@ def test_execute_default_options(mock_applefoundationmodels, mock_response):
     session.generate.assert_called_with("Test", temperature=1.0, max_tokens=1024)
 
 
-def test_generate_response_calls_session_generate(mock_applefoundationmodels):
-    """Test _generate_response calls session.generate correctly."""
-    model = llm_apple.AppleModel()
-    session = Mock()
-    session.generate = Mock(return_value="response text")
-
-    result = model._generate_response(
-        session=session, prompt_text="Test prompt", temperature=0.7, max_tokens=512
-    )
-
-    assert result == "response text"
-    session.generate.assert_called_once_with(
-        "Test prompt", temperature=0.7, max_tokens=512
-    )
-
-
 def test_stream_response_yields_chunks(mock_applefoundationmodels):
-    """Test _stream_response yields chunks from async generator."""
+    """Test _stream_response yields chunks from generate(stream=True)."""
+    from dataclasses import dataclass
+
+    @dataclass
+    class MockStreamChunk:
+        content: str
+
     model = llm_apple.AppleModel()
 
-    # Create a mock session with async generator
+    # Create a mock session with generate that returns chunks when stream=True
     session = Mock()
 
-    async def mock_async_gen():
-        for chunk in ["a", "b", "c"]:
-            yield chunk
+    def mock_stream_gen():
+        for chunk_text in ["a", "b", "c"]:
+            yield MockStreamChunk(content=chunk_text)
 
-    session.generate_stream = Mock(return_value=mock_async_gen())
+    session.generate = Mock(return_value=mock_stream_gen())
 
     # Get streaming results
     chunks = list(
@@ -171,8 +160,8 @@ def test_stream_response_yields_chunks(mock_applefoundationmodels):
     )
 
     assert chunks == ["a", "b", "c"]
-    session.generate_stream.assert_called_once_with(
-        "Test", temperature=1.0, max_tokens=100
+    session.generate.assert_called_once_with(
+        "Test", stream=True, temperature=1.0, max_tokens=100
     )
 
 

@@ -12,9 +12,9 @@ def test_availability_check_when_available():
     mock_module = Mock()
     mock_module.Availability = Mock()
     mock_module.Availability.AVAILABLE = 1
-    mock_module.Client = Mock()
-    mock_module.Client.check_availability = Mock(return_value=1)
-    mock_module.Client.get_availability_reason = Mock(return_value=None)
+    mock_module.Session = Mock()
+    mock_module.Session.check_availability = Mock(return_value=1)
+    mock_module.Session.get_availability_reason = Mock(return_value=None)
 
     sys.modules["applefoundationmodels"] = mock_module
 
@@ -34,9 +34,9 @@ def test_availability_check_when_unavailable():
     mock_module.Availability = Mock()
     mock_module.Availability.AVAILABLE = 1
     mock_module.Availability.UNAVAILABLE = 0
-    mock_module.Client = Mock()
-    mock_module.Client.check_availability = Mock(return_value=0)  # Unavailable
-    mock_module.Client.get_availability_reason = Mock(
+    mock_module.Session = Mock()
+    mock_module.Session.check_availability = Mock(return_value=0)  # Unavailable
+    mock_module.Session.get_availability_reason = Mock(
         return_value="Device not supported"
     )
 
@@ -60,9 +60,9 @@ def test_availability_check_unavailable_no_reason():
     mock_module = Mock()
     mock_module.Availability = Mock()
     mock_module.Availability.AVAILABLE = 1
-    mock_module.Client = Mock()
-    mock_module.Client.check_availability = Mock(return_value=0)
-    mock_module.Client.get_availability_reason = Mock(return_value=None)
+    mock_module.Session = Mock()
+    mock_module.Session.check_availability = Mock(return_value=0)
+    mock_module.Session.get_availability_reason = Mock(return_value=None)
 
     sys.modules["applefoundationmodels"] = mock_module
 
@@ -78,15 +78,15 @@ def test_availability_check_unavailable_no_reason():
         del sys.modules["applefoundationmodels"]
 
 
-def test_get_client_propagates_availability_error():
-    """Test that _get_client propagates availability errors."""
+def test_create_session_propagates_availability_error():
+    """Test that _create_session propagates availability errors."""
     # Create mock module
     mock_module = Mock()
     mock_module.Availability = Mock()
     mock_module.Availability.AVAILABLE = 1
-    mock_module.Client = Mock()
-    mock_module.Client.check_availability = Mock(return_value=0)
-    mock_module.Client.get_availability_reason = Mock(return_value="Not enabled")
+    mock_module.Session = Mock()
+    mock_module.Session.check_availability = Mock(return_value=0)
+    mock_module.Session.get_availability_reason = Mock(return_value="Not enabled")
 
     sys.modules["applefoundationmodels"] = mock_module
 
@@ -94,7 +94,7 @@ def test_get_client_propagates_availability_error():
         model = llm_apple.AppleModel()
 
         with pytest.raises(RuntimeError) as exc_info:
-            model._get_client()
+            model._create_session(None)
 
         assert "Apple Intelligence not available" in str(exc_info.value)
         assert "Not enabled" in str(exc_info.value)
@@ -108,20 +108,20 @@ def test_availability_lazy_check():
     mock_module = Mock()
     mock_module.Availability = Mock()
     mock_module.Availability.AVAILABLE = 1
-    mock_module.Client = Mock()
-    mock_module.Client.check_availability = Mock(return_value=1)
+    mock_module.Session = Mock()
+    mock_module.Session.check_availability = Mock(return_value=1)
 
     sys.modules["applefoundationmodels"] = mock_module
 
     try:
         # Creating model should not check availability
         model = llm_apple.AppleModel()
-        assert mock_module.Client.check_availability.call_count == 0
+        assert mock_module.Session.check_availability.call_count == 0
         assert model._availability_checked is False
 
-        # Only when we call _check_availability or _get_client
+        # Only when we call _check_availability or _create_session
         model._check_availability()
-        assert mock_module.Client.check_availability.call_count == 1
+        assert mock_module.Session.check_availability.call_count == 1
         assert model._availability_checked is True
     finally:
         del sys.modules["applefoundationmodels"]
