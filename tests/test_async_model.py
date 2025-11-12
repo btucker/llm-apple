@@ -413,6 +413,9 @@ async def test_async_model_create_session_with_tools(mock_applefoundationmodels)
     # Create session with tools
     session = model._create_session(instructions="Test", tools=[weather_tool])
 
+    # Verify session is the mocked AsyncSession instance
+    assert session is mock_applefoundationmodels.AsyncSession.return_value
+
     # Verify AsyncSession was called with tools
     assert mock_applefoundationmodels.AsyncSession.called
     call_kwargs = mock_applefoundationmodels.AsyncSession.call_args[1]
