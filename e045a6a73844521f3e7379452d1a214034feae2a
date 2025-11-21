@@ -1,0 +1,2 @@
+- Add support for schemas (https://llm.datasette.io/en/stable/schemas.html)
+  using the structured output support of apple-foundation-models:
