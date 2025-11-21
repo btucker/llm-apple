@@ -9,15 +9,15 @@ import llm_apple
 def test_apple_model_supports_schemas():
     """Test that AppleModel declares schema support."""
     model = llm_apple.AppleModel()
-    assert hasattr(model, "supports_schemas")
-    assert model.supports_schemas is True
+    assert hasattr(model, "supports_schema")
+    assert model.supports_schema is True
 
 
 def test_async_model_supports_schemas():
     """Test that AppleAsyncModel declares schema support."""
     model = llm_apple.AppleAsyncModel()
-    assert hasattr(model, "supports_schemas")
-    assert model.supports_schemas is True
+    assert hasattr(model, "supports_schema")
+    assert model.supports_schema is True
 
 
 def test_execute_with_schema(mock_applefoundationmodels, mock_response):
@@ -124,8 +124,34 @@ def test_execute_without_schema_returns_text(mock_applefoundationmodels, mock_re
     assert result == "Generated response"
 
 
-def test_schema_with_streaming_raises_error(mock_applefoundationmodels, mock_response):
-    """Test that using schema with streaming raises ValueError."""
+def test_schema_automatically_disables_streaming(
+    mock_applefoundationmodels, mock_response
+):
+    """Test that schema automatically disables streaming."""
+    from dataclasses import dataclass
+
+    @dataclass
+    class MockGenerationResponse:
+        content: str = "Generated response"
+        is_structured: bool = True
+        tool_calls: list = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return {"name": "Alice"}
+
+    session = Mock()
+    session.generate = Mock(return_value=MockGenerationResponse())
+    mock_applefoundationmodels.Session.return_value = session
+
     model = llm_apple.AppleModel()
 
     prompt = Mock()
@@ -135,14 +161,14 @@ def test_schema_with_streaming_raises_error(mock_applefoundationmodels, mock_res
     prompt.options.temperature = 1.0
     prompt.options.max_tokens = 1024
 
-    # Should raise ValueError when both schema and stream=True
-    with pytest.raises(
-        ValueError,
-        match="Schema-based structured output is not compatible with streaming",
-    ):
-        model.execute(
-            prompt=prompt, stream=True, response=mock_response, conversation=None
-        )
+    # Even though stream=True is requested, schema should disable it
+    result = model.execute(
+        prompt=prompt, stream=True, response=mock_response, conversation=None
+    )
+
+    # Should return non-streaming result (string, not generator)
+    assert isinstance(result, str)
+    assert result == '{"name": "Alice"}'
 
 
 @pytest.mark.asyncio
@@ -210,10 +236,35 @@ async def test_async_execute_with_schema(mock_applefoundationmodels, mock_respon
 
 
 @pytest.mark.asyncio
-async def test_async_schema_with_streaming_raises_error(
+async def test_async_schema_automatically_disables_streaming(
     mock_applefoundationmodels, mock_response
 ):
-    """Test that async model raises ValueError when using schema with streaming."""
+    """Test that async schema automatically disables streaming."""
+    from unittest.mock import AsyncMock
+    from dataclasses import dataclass
+
+    @dataclass
+    class MockGenerationResponse:
+        content: str = "Generated response"
+        is_structured: bool = True
+        tool_calls: list = None
+
+        @property
+        def text(self):
+            if self.is_structured:
+                raise ValueError("Response is structured")
+            return self.content
+
+        @property
+        def parsed(self):
+            if not self.is_structured:
+                raise ValueError("Response is not structured")
+            return {"name": "Bob"}
+
+    session = AsyncMock()
+    session.generate = AsyncMock(return_value=MockGenerationResponse())
+    mock_applefoundationmodels.AsyncSession.return_value = session
+
     model = llm_apple.AppleAsyncModel()
 
     prompt = Mock()
@@ -223,15 +274,16 @@ async def test_async_schema_with_streaming_raises_error(
     prompt.options.temperature = 1.0
     prompt.options.max_tokens = 1024
 
-    # Should raise ValueError when both schema and stream=True
-    with pytest.raises(
-        ValueError,
-        match="Schema-based structured output is not compatible with streaming",
+    # Even though stream=True is requested, schema should disable it
+    results = []
+    async for chunk in model.execute(
+        prompt=prompt, stream=True, response=mock_response, conversation=None
     ):
-        async for _ in model.execute(
-            prompt=prompt, stream=True, response=mock_response, conversation=None
-        ):
-            pass
+        results.append(chunk)
+
+    # Should return single result (streaming disabled)
+    assert len(results) == 1
+    assert results[0] == '{"name": "Bob"}'
 
 
 def test_schema_passed_to_session_generate(mock_applefoundationmodels, mock_response):

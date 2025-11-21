@@ -26,7 +26,7 @@ class AppleModel(llm.Model):
     model_id = "apple"
     can_stream = True
     supports_tools = True
-    supports_schemas = True
+    supports_schema = True
 
     class Options(llm.Options):
         """Options for Apple Foundation Models generation."""
@@ -201,11 +201,10 @@ class AppleModel(llm.Model):
         # Only use schema if it's actually a dict (avoid Mock objects and None)
         schema = schema if isinstance(schema, dict) else None
 
-        # Schema and streaming are incompatible
-        if schema is not None and stream:
-            raise ValueError(
-                "Schema-based structured output is not compatible with streaming"
-            )
+        # Automatically disable streaming when schema is provided
+        # Schema-based structured output requires the full response
+        if schema is not None:
+            stream = False
 
         # Get or create session with tools
         # In 0.2.0, tools are registered at session creation time
@@ -275,7 +274,7 @@ class AppleAsyncModel(llm.AsyncModel):
     model_id = "apple"
     can_stream = True
     supports_tools = True
-    supports_schemas = True
+    supports_schema = True
 
     class Options(llm.Options):
         """Options for Apple Foundation Models generation."""
@@ -450,11 +449,10 @@ class AppleAsyncModel(llm.AsyncModel):
         # Only use schema if it's actually a dict (avoid Mock objects and None)
         schema = schema if isinstance(schema, dict) else None
 
-        # Schema and streaming are incompatible
-        if schema is not None and stream:
-            raise ValueError(
-                "Schema-based structured output is not compatible with streaming"
-            )
+        # Automatically disable streaming when schema is provided
+        # Schema-based structured output requires the full response
+        if schema is not None:
+            stream = False
 
         # Get or create session with tools
         # In 0.2.0, tools are registered at session creation time

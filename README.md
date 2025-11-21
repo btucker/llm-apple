@@ -247,9 +247,9 @@ response = model.prompt(
 print(response.text())  # {"name": "Alice", "age": 28, "city": "Paris"}
 ```
 
-#### Schema Limitations
+#### Important Notes
 
-- **Not compatible with streaming**: Schema-based structured output requires the full response, so it cannot be used with streaming mode.
+- **Streaming automatically disabled**: When you provide a schema, streaming is automatically disabled since structured output requires the full response. You don't need to explicitly set `stream=False` - it happens automatically.
 
 ### Available Options
 
