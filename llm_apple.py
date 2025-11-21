@@ -26,6 +26,7 @@ class AppleModel(llm.Model):
     model_id = "apple"
     can_stream = True
     supports_tools = True
+    supports_schemas = True
 
     class Options(llm.Options):
         """Options for Apple Foundation Models generation."""
@@ -195,6 +196,17 @@ class AppleModel(llm.Model):
         has_tools = self._is_valid_list_attribute(prompt, "tools")
         tools = prompt.tools if has_tools else None
 
+        # Check if we have a schema (schema should be a dict if provided)
+        schema = getattr(prompt, "schema", None)
+        # Only use schema if it's actually a dict (avoid Mock objects and None)
+        schema = schema if isinstance(schema, dict) else None
+
+        # Schema and streaming are incompatible
+        if schema is not None and stream:
+            raise ValueError(
+                "Schema-based structured output is not compatible with streaming"
+            )
+
         # Get or create session with tools
         # In 0.2.0, tools are registered at session creation time
         session = self._get_session(conversation_id, system_prompt, tools)
@@ -221,18 +233,30 @@ class AppleModel(llm.Model):
                 session, prompt_text, temperature, max_tokens
             )
         else:
-            # Get the full response object to extract tool calls
-            gen_response = session.generate(
-                prompt_text, temperature=temperature, max_tokens=max_tokens
-            )
+            # Get the full response object to extract tool calls or structured output
+            # Only pass schema parameter if it's actually set
+            if schema is not None:
+                gen_response = session.generate(
+                    prompt_text,
+                    schema=schema,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+            else:
+                gen_response = session.generate(
+                    prompt_text, temperature=temperature, max_tokens=max_tokens
+                )
 
             # Extract tool calls from response.tool_calls (0.2.0+ API)
             tool_calls = self._extract_tool_calls_from_response(gen_response)
             for tool_call in tool_calls:
                 response.add_tool_call(tool_call)
 
-            # Return the text content
-            result = gen_response.text
+            # Return the parsed content if schema was provided, otherwise text
+            if schema is not None:
+                result = json.dumps(gen_response.parsed)
+            else:
+                result = gen_response.text
 
         return result
 
@@ -251,6 +275,7 @@ class AppleAsyncModel(llm.AsyncModel):
     model_id = "apple"
     can_stream = True
     supports_tools = True
+    supports_schemas = True
 
     class Options(llm.Options):
         """Options for Apple Foundation Models generation."""
@@ -420,6 +445,17 @@ class AppleAsyncModel(llm.AsyncModel):
         has_tools = self._is_valid_list_attribute(prompt, "tools")
         tools = prompt.tools if has_tools else None
 
+        # Check if we have a schema (schema should be a dict if provided)
+        schema = getattr(prompt, "schema", None)
+        # Only use schema if it's actually a dict (avoid Mock objects and None)
+        schema = schema if isinstance(schema, dict) else None
+
+        # Schema and streaming are incompatible
+        if schema is not None and stream:
+            raise ValueError(
+                "Schema-based structured output is not compatible with streaming"
+            )
+
         # Get or create session with tools
         # In 0.2.0, tools are registered at session creation time
         session = self._get_session(conversation_id, system_prompt, tools)
@@ -447,18 +483,30 @@ class AppleAsyncModel(llm.AsyncModel):
             ):
                 yield chunk_text
         else:
-            # Get the full response object to extract tool calls
-            gen_response = await session.generate(
-                prompt_text, temperature=temperature, max_tokens=max_tokens
-            )
+            # Get the full response object to extract tool calls or structured output
+            # Only pass schema parameter if it's actually set
+            if schema is not None:
+                gen_response = await session.generate(
+                    prompt_text,
+                    schema=schema,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+            else:
+                gen_response = await session.generate(
+                    prompt_text, temperature=temperature, max_tokens=max_tokens
+                )
 
             # Extract tool calls from response.tool_calls (0.2.0+ API)
             tool_calls = self._extract_tool_calls_from_response(gen_response)
             for tool_call in tool_calls:
                 response.add_tool_call(tool_call)
 
-            # Return the text content
-            yield gen_response.text
+            # Return the parsed content if schema was provided, otherwise text
+            if schema is not None:
+                yield json.dumps(gen_response.parsed)
+            else:
+                yield gen_response.text
 
     async def _stream_response(self, session, prompt_text, temperature, max_tokens):
         """Stream response tokens asynchronously."""

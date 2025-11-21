@@ -183,6 +183,74 @@ response = model.prompt(
 
 The model will automatically select and call the appropriate tools based on the prompt.
 
+### Structured Output (Schemas)
+
+The plugin supports structured output using JSON schemas, allowing you to get consistently formatted responses from the model.
+
+#### CLI Schema Usage
+
+Define the structure you want using JSON schema syntax:
+
+```bash
+# Simple person extraction
+llm -m apple "Alice is 28 and lives in Paris" \
+  --schema '{"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "integer"}, "city": {"type": "string"}}, "required": ["name", "age", "city"]}'
+```
+
+Or use the concise schema syntax:
+
+```bash
+# Same as above but simpler
+llm -m apple "Alice is 28 and lives in Paris" --schema 'name, age int, city'
+```
+
+Extract multiple entities:
+
+```bash
+llm -m apple "Bob is 35 from London and Carol is 42 from Tokyo" \
+  --schema 'items: [{"name": "string", "age": "integer", "city": "string"}]'
+```
+
+Save schemas for reuse:
+
+```bash
+# Save a schema
+llm -m apple "Alice, 28, Paris" --schema 'name, age int, city' --save person-schema
+
+# Reuse it
+llm -m apple "Bob is 35 and lives in London" --schema t:person-schema
+```
+
+#### Python API Schema Usage
+
+```python
+import llm
+
+model = llm.get_model("apple")
+
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer"},
+        "city": {"type": "string"}
+    },
+    "required": ["name", "age", "city"]
+}
+
+response = model.prompt(
+    "Extract person info: Alice is 28 and lives in Paris",
+    schema=schema
+)
+
+# Response will be JSON-formatted
+print(response.text())  # {"name": "Alice", "age": 28, "city": "Paris"}
+```
+
+#### Schema Limitations
+
+- **Not compatible with streaming**: Schema-based structured output requires the full response, so it cannot be used with streaming mode.
+
 ### Available Options
 
 - `temperature` (float, 0.0-2.0, default: 1.0): Controls randomness in generation
