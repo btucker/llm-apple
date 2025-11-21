@@ -1,6 +1,6 @@
 [project]
 name = "llm-apple"
-version = "0.2.0"
+version = "0.3.0"
 description = "LLM plugin for Apple Foundation Models (Apple Intelligence)"
 readme = "README.md"
 authors = [{ name = "Ben Tucker" }]
